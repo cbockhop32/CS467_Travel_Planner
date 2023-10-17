@@ -13,6 +13,9 @@ function LeftContainer() {
             <ListGroup.Item action href="#link2">
             Experience 2
             </ListGroup.Item>
+            <ListGroup.Item action href="#link3">
+            Experience 3
+            </ListGroup.Item>
       </ListGroup>
      );
 }
