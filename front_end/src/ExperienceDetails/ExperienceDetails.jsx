@@ -5,11 +5,18 @@ import ImageCarousel from '../ImageCarousel/ImageCarousel';
 import MapboxComponent from '../MapboxComponent/MapboxComponent';
 
 
-function ExperienceDetails({id}) {
+function ExperienceDetails({id, name, location}) {
     return ( 
         <Container style={{height:"80vh"}} >
             <Row className='mb-1'  >
-                <Col lg={7} style={{fontSize:"28px"}}>Experience Name {id}</Col>
+                <Col lg={7} style={{fontSize:"28px"}}>
+                    <Row>
+                        {name}
+                    </Row>
+                    <Row style={{fontSize:"16px"}}>
+                        {location}
+                    </Row>    
+                </Col>
                 <Col lg={5}>
                     <Rating readonly={true} allowFraction={true} initialValue={4.5} />
                 </Col>

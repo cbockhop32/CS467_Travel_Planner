@@ -5,7 +5,7 @@ import { Rating } from 'react-simple-star-rating'
 
 
 
-function ExperienceTab({id}) {
+function ExperienceTab({id,name,location}) {
     return (  
         <ListGroup.Item style={{height:"75px"}}  variant='primary' className='mt-2 rounded-3'action href={`#link${id}`}>
             <Row>
@@ -13,8 +13,8 @@ function ExperienceTab({id}) {
                     <Image className='rounded-3' style={{height:"60px"}} src='/pics/harbin.jpeg'/>
                 </Col>
                 <Col sm ={6} lg={6}> 
-                    <Row>Experience {id}</Row>
-                    <Row>Experience Location</Row>
+                    <Row>{name}</Row>
+                    <Row>{location}</Row>
                 </Col>
                 <Col sm={2} lg={2}>
                     <Rating readonly={true} iconsCount={1} size={25} initialValue={1} />
