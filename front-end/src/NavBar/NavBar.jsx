@@ -5,14 +5,11 @@ import {Row, Col} from 'react-bootstrap'
 
 function NavBar() {
     return (
-
-        <Row className="justify-content-md-center m-2 p-1 border-bottom">
-            <Col>
-                Crowd Sourced Travel Planner
-
+        <Row className="justify-content-md-center mb-3 p-2 border-bottom" style={{backgroundColor:"#3c6e71"}}>
+            <Col className='text-light' style={{fontSize:"24px"}}>
+               Crowd Sourced Travel Planner
             </Col>
             <Col className='text-center'>
-                View Trips
 
             </Col>
             <Col className='text-end'>
@@ -21,7 +18,6 @@ function NavBar() {
             </Col>
 
      </Row>
-  
     );
 }
 
