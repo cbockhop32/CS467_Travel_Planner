@@ -1,9 +1,12 @@
-import React from 'react'
-
-import {Row, Col} from 'react-bootstrap'
+import React, {useState} from 'react'
+import {Row, Col,Modal, Button} from 'react-bootstrap'
 
 
 function NavBar() {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
     return (
         <Row className="justify-content-md-center mb-3 p-2 border-bottom" style={{backgroundColor:"#3c6e71"}}>
             <Col className='text-light' style={{fontSize:"24px"}}>
@@ -13,7 +16,23 @@ function NavBar() {
 
             </Col>
             <Col className='text-end'>
-                Login/Register
+                <a  onClick={handleShow} style={{cursor:"pointer"}} className='link-dark'>Login/Register</a>
+
+
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Login Into Your Account</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Login feature here</Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Register
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Login
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
 
             </Col>
 
