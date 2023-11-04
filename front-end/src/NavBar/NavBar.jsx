@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
-import {Row, Col,Modal, Button} from 'react-bootstrap'
+import {Row, Col} from 'react-bootstrap'
+
+import UserLogin from '../UserLogin/UserLogin';
 
 
 function NavBar() {
@@ -17,22 +19,9 @@ function NavBar() {
             </Col>
             <Col className='text-end'>
                 <a  onClick={handleShow} style={{cursor:"pointer"}} className='link-dark'>Login/Register</a>
+                <UserLogin handleClose={handleClose} show={show} />
 
-
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                    <Modal.Title>Login Into Your Account</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>Login feature here</Modal.Body>
-                    <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Register
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Login
-                    </Button>
-                    </Modal.Footer>
-                </Modal>
+             
 
             </Col>
 

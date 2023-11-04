@@ -14,7 +14,7 @@ function SearchBar() {
                 <Form.Control className="me-auto" placeholder='Enter Experience Name, Keywords, Location, etc.' />
                 <Button variant="primary" >Search</Button>
                 <div className="vr" />
-                <Button variant="primary" onClick={handleShow}>Add</Button>
+                <Button variant="primary"  onClick={handleShow}>Add</Button>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Add An Experience</Modal.Title>

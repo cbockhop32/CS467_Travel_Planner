@@ -15,8 +15,8 @@ function ExperienceDetails({id, name, location}) {
 
     return ( 
         <Container style={{height:"80vh"}} >
-            <Row className='mb-1'  >
-                <Col lg={7} style={{fontSize:"28px"}}>
+            <Row className='mb-1 text-start'  >
+                <Col lg={6} style={{fontSize:"28px"}}>
                     <Row>
                         {name}
                     </Row>
@@ -24,7 +24,7 @@ function ExperienceDetails({id, name, location}) {
                         {location}
                     </Row>    
                 </Col>
-                <Col className='mt-2 '  lg={5}>
+                <Col className='mt-2 text-end'   lg={6}>
                     <Rating readonly={true} allowFraction={true} initialValue={4.5} />
                     <Button onClick={handleShow} style={{marginLeft:"20px"}}>Add To Trip</Button>
 
@@ -47,8 +47,6 @@ function ExperienceDetails({id, name, location}) {
                         </Modal.Footer>
                     </Modal>
 
-
-
                 </Col>
                 </Row>
             <Row className='h-50 mb-2'>
@@ -59,6 +57,8 @@ function ExperienceDetails({id, name, location}) {
                     <MapboxComponent></MapboxComponent>
                 </Col>
             </Row>
+            <hr></hr>
+
             <Row className='m-2' style={{display:"inline"}} >
             <b>Description:</b> A national garden and premier horticultural attraction for local and international visitors, Gardens by the Bay is a showpiece of horticulture and garden artistry that presents the plant kingdom in a whole new way, entertaining while educating visitors with plants seldom seen in this part of the world, ranging from species in cool, temperate climates to tropical forests and habitats.
             </Row>
