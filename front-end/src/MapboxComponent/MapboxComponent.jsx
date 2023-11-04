@@ -1,8 +1,6 @@
-import {React, useEffect,useState, useRef} from 'react'
-
+import {React} from 'react'
 import Map, {Marker} from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
-import { environment } from '../Environments/EnvDev';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
@@ -18,8 +16,6 @@ function MapboxComponent() {
         longitude:126.73029898440065,
         zoom: 8
         }}
-
-        
         style={{width: "100%", height: "100%"}}
         mapStyle="mapbox://styles/mapbox/streets-v9"
     >
