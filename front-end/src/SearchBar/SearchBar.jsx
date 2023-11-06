@@ -1,12 +1,68 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
-
+import axios from "axios";
 
 function SearchBar() {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    
+    // use hook to handle state of city/state/country 
+    // and lat and lon
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
+    const [lattitude, setLat] = useState('');
+    const [longitude, setLon] = useState('');
+
+
+    const handleClose = () => {
+        setShow(false)
+        geoLocation();
+    };
+
     const handleShow = () => setShow(true);
   
+    // react hook on change handlers
+    const onCityChange = (e) => {
+        setCity(e.target.value)
+    };
+
+    const onStateChange = (e) => {
+        setState(e.target.value)
+    };
+
+    const onCountryChange = (e) => {
+        setCountry(e.target.value)
+    };
+
+    // Will work on moving this functionality fully to its own file
+    const geoLocation = async () => {
+
+            let cityname =  city
+            let statecode = state
+            if (state == ''){ statecode = country}
+            // let APIkey = '3dd6b4b0643fe807a69521e6f5cd399a'
+            let baseURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`
+            
+                await axios.get(baseURL).then((response)=> {
+                console.log(response);
+
+                setLat(response.data[0].lat);
+                setLon(response.data[0].lon)
+            })
+            .catch(error => console.error("Error fetching geolocation:", error));
+        }
+
+
+    // Can un-comment this to see React state change in console
+    useEffect(() => 
+    console.log("city:", city),
+    console.log("state:", state),
+    console.log("country:", country),
+    console.log("country:", country),
+    console.log("lattitude:", lattitude),
+    console.log("longitude:", longitude),
+    [city, state, country, lattitude, longitude]);
+
     return ( 
 
         <Row className="justify-content-md-center mb-3 ">
@@ -30,8 +86,22 @@ function SearchBar() {
                                 <Form.Control  />
                             </Form.Group>
                             <Form.Group className='mb-3'>
-                                <Form.Label>Geo-Location (Lat,Lon)</Form.Label>
-                                <Form.Control  />
+                                <Form.Label>City</Form.Label>
+                                <Form.Control  
+                                value={city} 
+                                onChange={onCityChange}/>
+                            </Form.Group>                            
+                                <Form.Group className='mb-3'>
+                                <Form.Label>State (US States Only)</Form.Label>
+                                <Form.Control 
+                                value={state} 
+                                onChange={onStateChange}/>
+                            </Form.Group>
+                            <Form.Group className='mb-3'>
+                                <Form.Label>Country</Form.Label>
+                                <Form.Control  
+                                value={country}
+                                onChange={onCountryChange} />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Description</Form.Label>
