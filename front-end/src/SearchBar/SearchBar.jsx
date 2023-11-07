@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
+import geoLocation from '../Geolocation/geolocationAPI';
 import axios from "axios";
 
 function SearchBar() {
@@ -16,7 +17,7 @@ function SearchBar() {
 
     const handleClose = () => {
         setShow(false)
-        geoLocation();
+        geoLocation(city, state, country, setLat, setLon);
     };
 
     const handleShow = () => setShow(true);
@@ -33,25 +34,6 @@ function SearchBar() {
     const onCountryChange = (e) => {
         setCountry(e.target.value)
     };
-
-    // Will work on moving this functionality fully to its own file
-    const geoLocation = async () => {
-
-            let cityname =  city
-            let statecode = state
-            if (state == ''){ statecode = country}
-            // let APIkey = '3dd6b4b0643fe807a69521e6f5cd399a'
-            let baseURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`
-            
-                await axios.get(baseURL).then((response)=> {
-                console.log(response);
-
-                setLat(response.data[0].lat);
-                setLon(response.data[0].lon)
-            })
-            .catch(error => console.error("Error fetching geolocation:", error));
-        }
-
 
     // Can un-comment this to see React state change in console
     useEffect(() => 
