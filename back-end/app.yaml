@@ -1,6 +1,4 @@
 runtime: python39
-service: back-end
-entrypoint: python main.py
 
 handlers:
   # This handler routes all requests not caught above to your main app. It is
