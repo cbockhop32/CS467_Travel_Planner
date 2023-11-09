@@ -7,18 +7,18 @@ import RightContainer from '../RightContainer/RightContainer';
 
 function MainContainer() {
     return ( 
-        <Row className='justify-content-md-center'>
-               <Tab.Container fluid style={{height:"90vh", width:"100%" }} >
-                    <Row fluid className='justify-content-md-center' style={{maxWidth:"1600px"}}  >
-                        <Col lg={4}>
+        <Row className='justify-content-md-center overflow-hidden' style={{height:"85%"}}  >
+               <Tab.Container   style={{ width:"100%"}} >
+                    <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
+                        <Col lg={4} className='h-100'>
                             <LeftContainer />
                         </Col>
-                        <Col lg={8}>
-                            <RightContainer/>
+                        <Col  lg={8} className='h-100'>
+                            <RightContainer />
                         </Col>
                     </Row>
                 </Tab.Container>
-        </Row>
+        </Row> 
      );
 }
 
