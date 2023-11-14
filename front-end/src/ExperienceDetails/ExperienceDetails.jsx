@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Container,Row, Col, Button,Modal, Dropdown,DropdownButton } from 'react-bootstrap';
+import { Container,Row, Col, Button,Modal, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Rating } from 'react-simple-star-rating'
 import ImageCarousel from '../ImageCarousel/ImageCarousel';
 import MapboxComponent from '../MapboxComponent/MapboxComponent';
@@ -14,8 +14,8 @@ function ExperienceDetails({id, name, location}) {
 
 
     return ( 
-        <Container className='h-100 w-100'  >
-            <Row className='mb-1 text-start' >
+        <Container className='h-100 w-100'>
+            <Row className='mb-1 text-start'>
                 <Col lg={6} style={{fontSize:"28px"}}>
                     <Row>
                         {name}
@@ -63,7 +63,18 @@ function ExperienceDetails({id, name, location}) {
                 <b>Description:</b> <p>A national garden and premier horticultural attraction for local and international visitors, Gardens by the Bay is a showpiece of horticulture and garden
                      artistry that presents the plant kingdom in a whole new way, entertaining while educating visitors with plants seldom seen 
                      in this part of the world, ranging from species in cool, temperate climates to tropical forests and habitats.
+                     
+                        <br></br>
+                        <br></br>
+
+                        <br></br>
+
+                        <br></br>
+
+                     
                       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur dolor minus quidem voluptatem quia reiciendis officia quibusdam, pariatur odit, officiis in delectus est sit debitis nam molestias nihil animi accusamus iste nulla nostrum, unde eaque corrupti qui? Deserunt, velit exercitationem aperiam mollitia dolorum eos, cupiditate tenetur voluptates voluptatibus aliquam libero.
+                      <br></br>
+                      <br></br>
 
                       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat, dolores odio. Laboriosam eaque eveniet earum, harum laudantium consectetur molestias eius voluptatum! Repudiandae corporis, iste esse, nemo temporibus libero ducimus quam quos obcaecati hic neque nisi. Optio repudiandae alias a, consequuntur in accusamus consequatur nulla sint tempore vero quas ea rem, eligendi illum doloribus earum magnam necessitatibus esse dolores? Similique quisquam minima corporis a recusandae, blanditiis soluta iure? Tenetur voluptas modi officia laboriosam similique suscipit, praesentium unde! Aspernatur temporibus adipisci iusto eum tenetur. Velit numquam hic cumque ad quod. Doloribus adipisci ratione quas dignissimos possimus numquam eligendi maiores vitae! Possimus, mollitia.
                      
