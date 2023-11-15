@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
-import axios from "axios";
 
 function SearchBar() {
     const [show, setShow] = useState(false);
@@ -36,18 +35,18 @@ function SearchBar() {
     };
 
     // Can un-comment this to see React state change in console
-    useEffect(() => 
-    console.log("city:", city),
-    console.log("state:", state),
-    console.log("country:", country),
-    console.log("country:", country),
-    console.log("lattitude:", lattitude),
-    console.log("longitude:", longitude),
-    [city, state, country, lattitude, longitude]);
+    // useEffect(() => 
+    // console.log("city:", city),
+    // console.log("state:", state),
+    // console.log("country:", country),
+    // console.log("country:", country),
+    // console.log("lattitude:", lattitude),
+    // console.log("longitude:", longitude),
+    // [city, state, country, lattitude, longitude]);
 
     return ( 
 
-        <Row className="justify-content-md-center mb-3 ">
+        <Row className="justify-content-md-center mb-3" style={{height:"10%", maxHeight:"50px"}}>
             <Stack className='m-2' direction="horizontal" gap={3} style={{width:"50%"}}>
                 <Form.Control className="me-auto" placeholder='Enter Experience Name, Keywords, Location, etc.' />
                 <Button variant="primary" >Search</Button>
