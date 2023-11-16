@@ -1,18 +1,18 @@
 import React,{useContext} from 'react'
 import { Tab } from 'react-bootstrap';
-import { TripsContext } from '../Context/TripsContext';
+import { ExperiencesContext } from '../Context/ExperiencesContext';
 
 import ExperienceDetails from '../ExperienceDetails/ExperienceDetails';
 
 
 
 function RightContainer() {
-    const {currentTrips} = useContext(TripsContext);
+    const {currentExperiences} = useContext(ExperiencesContext);
 
     return (  
         <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"95%",overflowY:"scroll"}}>
-            {currentTrips.map((trip,index) => {
-                return (<Tab.Pane eventKey={`#link${index}`}><ExperienceDetails id = {index} name={trip.trip_name} location={"Somewhere"} description={trip.description}/></Tab.Pane>
+            {currentExperiences.map((experience,index) => {
+                return (<Tab.Pane eventKey={`#link${index}`}><ExperienceDetails id = {index} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
                 )
             })}
       </Tab.Content>

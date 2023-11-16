@@ -36,9 +36,9 @@ function SearchBar() {
         // pass the lat and lon once parameters are made in the back end
         geoLocation(city, state, country, setLat, setLon);
 
-        axios.post(`${API_BASE_URL}/trips`,
+        axios.post(`${API_BASE_URL}/experiences`,
         {
-            trip_name: name,
+            experience_name: name,
             description: description
 
         })

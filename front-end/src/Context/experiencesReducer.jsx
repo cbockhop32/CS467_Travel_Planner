@@ -1,14 +1,12 @@
 export default(state, action) => {
     switch(action.type) {
-        case 'UPDATE_TRIPS':
+        case 'UPDATE_EXPERIENCES':
             return {
-                trips: action.payload
+                experiences: action.payload
             }
 
 
             default: 
              return state;
-                
-            
     }
 }
