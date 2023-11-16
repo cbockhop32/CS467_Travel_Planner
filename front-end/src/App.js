@@ -7,12 +7,15 @@ import SearchBar from './SearchBar/SearchBar';
 import MainContainer from './MainContainer/MainContainer';
 
 
+
 function App() {
   return (
     <div className="App"  >
+
       <NavBar />
       <SearchBar />
       <MainContainer  />
+
     </div>
   );
 }
