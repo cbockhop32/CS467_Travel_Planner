@@ -1,25 +1,54 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
+import useInputState from '../hooks/useInputState';
+import axios from 'axios';
 
 function SearchBar() {
     const [show, setShow] = useState(false);
     
     // use hook to handle state of city/state/country 
     // and lat and lon
+    const [name, updateName, resetName] = useInputState('');
+    const [location, updateLocation, resetLocation] = useInputState('');
+    const [description, updateDescription, resetDescription] = useInputState('');
+
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [country, setCountry] = useState('');
     const [lattitude, setLat] = useState('');
     const [longitude, setLon] = useState('');
+    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
 
-    const handleClose = () => {
-        setShow(false)
-        geoLocation(city, state, country, setLat, setLon);
+
+    
+    const handleAdd = () => {
+
+        setShow(false);
+        // pass the lat and lon once parameters are made in the back end
+        // geoLocation(city, state, country, setLat, setLon);
+
+
+        axios.post(`${API_BASE_URL}/trips`,
+        {
+            trip_name: name,
+            description: description
+
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>console.log(e))
+
+        // clear input fields
+        resetName();
+        resetLocation();
+        resetDescription();
+
+
     };
 
     const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
   
     // react hook on change handlers
     const onCityChange = (e) => {
@@ -60,11 +89,17 @@ function SearchBar() {
                         <Form>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Name of Experience</Form.Label>
-                                <Form.Control  />
+                                <Form.Control 
+                                    value={name}
+                                    onChange={updateName}
+                                />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Location</Form.Label>
-                                <Form.Control  />
+                                <Form.Control 
+                                   value={location}
+                                   onChange={updateLocation}
+                                />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>City</Form.Label>
@@ -86,7 +121,10 @@ function SearchBar() {
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" rows={3}  />
+                                <Form.Control as="textarea" rows={3} 
+                                       value={description}
+                                       onChange={updateDescription}
+                                />
                             </Form.Group>
                             <Form.Group controlId="formFileSm" className="mb-3">
                                 <Form.Label>Add Images</Form.Label>
@@ -98,7 +136,7 @@ function SearchBar() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleAdd}>
                         Add
                     </Button>
                     </Modal.Footer>
