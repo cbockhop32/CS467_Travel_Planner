@@ -12,23 +12,29 @@ function SearchBar() {
     const [name, updateName, resetName] = useInputState('');
     const [location, updateLocation, resetLocation] = useInputState('');
     const [description, updateDescription, resetDescription] = useInputState('');
+    const [city, updateCity, resetCity] = useInputState('');
+    const [state, updateState, resetState] = useInputState('');
+    const [country, updateCountry, resetCountry] = useInputState('');
 
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
     const [lattitude, setLat] = useState('');
     const [longitude, setLon] = useState('');
     const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
 
+    const resetFields = () => {
+        resetName();
+        resetLocation();
+        resetDescription();
+        resetCity();
+        resetState();
+        resetCountry();
 
+    }
     
     const handleAdd = () => {
-
         setShow(false);
         // pass the lat and lon once parameters are made in the back end
-        // geoLocation(city, state, country, setLat, setLon);
-
+        geoLocation(city, state, country, setLat, setLon);
 
         axios.post(`${API_BASE_URL}/trips`,
         {
@@ -40,29 +46,20 @@ function SearchBar() {
         .catch((e)=>console.log(e))
 
         // clear input fields
-        resetName();
-        resetLocation();
-        resetDescription();
-
-
+       resetFields();
     };
 
+
+   
     const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        // clear input fields
+        resetFields();
+    }
   
-    // react hook on change handlers
-    const onCityChange = (e) => {
-        setCity(e.target.value)
-    };
-
-    const onStateChange = (e) => {
-        setState(e.target.value)
-    };
-
-    const onCountryChange = (e) => {
-        setCountry(e.target.value)
-    };
-
+ 
+ 
     // Can un-comment this to see React state change in console
     // useEffect(() => 
     // console.log("city:", city),
@@ -105,19 +102,19 @@ function SearchBar() {
                                 <Form.Label>City</Form.Label>
                                 <Form.Control  
                                 value={city} 
-                                onChange={onCityChange}/>
+                                onChange={updateCity}/>
                             </Form.Group>                            
                                 <Form.Group className='mb-3'>
                                 <Form.Label>State (US States Only)</Form.Label>
                                 <Form.Control 
                                 value={state} 
-                                onChange={onStateChange}/>
+                                onChange={updateState}/>
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Country</Form.Label>
                                 <Form.Control  
                                 value={country}
-                                onChange={onCountryChange} />
+                                onChange={updateCountry} />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Description</Form.Label>
