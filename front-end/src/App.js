@@ -1,10 +1,10 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
 
 import NavBar from './NavBar/NavBar';
 import SearchBar from './SearchBar/SearchBar';
 import MainContainer from './MainContainer/MainContainer';
+
 
 
 function App() {

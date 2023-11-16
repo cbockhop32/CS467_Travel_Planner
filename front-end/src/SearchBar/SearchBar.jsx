@@ -1,39 +1,65 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
+import useInputState from '../hooks/useInputState';
+import axios from 'axios';
 
 function SearchBar() {
     const [show, setShow] = useState(false);
     
     // use hook to handle state of city/state/country 
     // and lat and lon
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
+    const [name, updateName, resetName] = useInputState('');
+    const [location, updateLocation, resetLocation] = useInputState('');
+    const [description, updateDescription, resetDescription] = useInputState('');
+    const [city, updateCity, resetCity] = useInputState('');
+    const [state, updateState, resetState] = useInputState('');
+    const [country, updateCountry, resetCountry] = useInputState('');
+
     const [lattitude, setLat] = useState('');
     const [longitude, setLon] = useState('');
+    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
 
-    const handleClose = () => {
-        setShow(false)
+    const resetFields = () => {
+        resetName();
+        resetLocation();
+        resetDescription();
+        resetCity();
+        resetState();
+        resetCountry();
+
+    }
+    
+    const handleAdd = () => {
+        setShow(false);
+        // pass the lat and lon once parameters are made in the back end
         geoLocation(city, state, country, setLat, setLon);
+
+        axios.post(`${API_BASE_URL}/experiences`,
+        {
+            experience_name: name,
+            description: description
+
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>console.log(e))
+
+        // clear input fields
+       resetFields();
     };
 
+
+   
     const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+        // clear input fields
+        resetFields();
+    }
   
-    // react hook on change handlers
-    const onCityChange = (e) => {
-        setCity(e.target.value)
-    };
-
-    const onStateChange = (e) => {
-        setState(e.target.value)
-    };
-
-    const onCountryChange = (e) => {
-        setCountry(e.target.value)
-    };
-
+ 
+ 
     // Can un-comment this to see React state change in console
     // useEffect(() => 
     // console.log("city:", city),
@@ -60,33 +86,42 @@ function SearchBar() {
                         <Form>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Name of Experience</Form.Label>
-                                <Form.Control  />
+                                <Form.Control 
+                                    value={name}
+                                    onChange={updateName}
+                                />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Location</Form.Label>
-                                <Form.Control  />
+                                <Form.Control 
+                                   value={location}
+                                   onChange={updateLocation}
+                                />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>City</Form.Label>
                                 <Form.Control  
                                 value={city} 
-                                onChange={onCityChange}/>
+                                onChange={updateCity}/>
                             </Form.Group>                            
                                 <Form.Group className='mb-3'>
                                 <Form.Label>State (US States Only)</Form.Label>
                                 <Form.Control 
                                 value={state} 
-                                onChange={onStateChange}/>
+                                onChange={updateState}/>
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Country</Form.Label>
                                 <Form.Control  
                                 value={country}
-                                onChange={onCountryChange} />
+                                onChange={updateCountry} />
                             </Form.Group>
                             <Form.Group className='mb-3'>
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" rows={3}  />
+                                <Form.Control as="textarea" rows={3} 
+                                       value={description}
+                                       onChange={updateDescription}
+                                />
                             </Form.Group>
                             <Form.Group controlId="formFileSm" className="mb-3">
                                 <Form.Label>Add Images</Form.Label>
@@ -98,7 +133,7 @@ function SearchBar() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleAdd}>
                         Add
                     </Button>
                     </Modal.Footer>
