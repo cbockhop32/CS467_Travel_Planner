@@ -12,7 +12,7 @@ function RightContainer() {
     return (  
         <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"95%",overflowY:"scroll"}}>
             {currentExperiences.map((experience,index) => {
-                return (<Tab.Pane eventKey={`#link${index}`}><ExperienceDetails id = {index} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  id = {index} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
                 )
             })}
       </Tab.Content>
