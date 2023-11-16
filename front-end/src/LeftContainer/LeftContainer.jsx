@@ -1,11 +1,34 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 
 import { ListGroup } from 'react-bootstrap';
 
 import ExperienceTab from '../ExperienceTab/ExperienceTab';
+import axios from "axios";
 
 
 function LeftContainer() {
+    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
+
+
+        
+
+    useEffect(() => {
+        axios
+        .get(`${API_BASE_URL}/trips`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {console.log(res.trips);},[])
+        .catch(e => console.log(e))
+    });
+
+
+
+
+
+
     return ( 
 
         <ListGroup className='m-2 p-2'  style={{ height:"95%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
