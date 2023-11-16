@@ -7,6 +7,7 @@ import requests
 import logging
 import urllib.parse
 from urllib.parse import quote_plus
+from flask_cors import CORS
 
 from functools import wraps
 import json
@@ -30,6 +31,7 @@ from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 
 app = Flask(__name__)
+CORS(app)
 
 app.secret_key = 'SECRET_KEY'
 
