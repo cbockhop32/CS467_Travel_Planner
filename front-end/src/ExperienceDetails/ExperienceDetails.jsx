@@ -1,17 +1,21 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import { Container,Row, Col, Button,Modal, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Rating } from 'react-simple-star-rating'
 import ImageCarousel from '../ImageCarousel/ImageCarousel';
 import MapboxComponent from '../MapboxComponent/MapboxComponent';
+import { ExperiencesContext } from '../Context/ExperiencesContext';
 
 
 function ExperienceDetails({id, name, location,description}) {
-
+    const {currentTrips} = useContext(ExperiencesContext);
     const [show, setShow] = useState(false);
+    const [dropdownValue, setDropdownValue] = useState('Choose Trip');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-
+    const handleDropdownSelect = (e) => {
+        setDropdownValue(e);
+    }
 
     return ( 
         <Container className='h-100 w-100'>
@@ -33,10 +37,10 @@ function ExperienceDetails({id, name, location,description}) {
                         <Modal.Title>Add Experience To One Of Your Trips</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <DropdownButton id="dropdown-basic-button" title="Choose Trip">
-                                <Dropdown.Item href="#/action-1">Trip 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Trip 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Trip 3</Dropdown.Item>
+                            <DropdownButton id="dropdown-basic-button" title={dropdownValue} onSelect={handleDropdownSelect}>
+                                {currentTrips.map((trip,index) => {
+                                    return (<Dropdown.Item key={index} href="#/action-1" eventKey={trip.trip_name}>{trip.trip_name}</Dropdown.Item>)
+                                })}
                             </DropdownButton>
 
                         </Modal.Body>

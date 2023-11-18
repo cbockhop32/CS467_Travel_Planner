@@ -1,13 +1,27 @@
-import React,{useContext} from 'react'
+import React,{useContext,useEffect} from 'react'
 import { Tab } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
-
 import ExperienceDetails from '../ExperienceDetails/ExperienceDetails';
-
+import axios from 'axios';
 
 
 function RightContainer() {
-    const {currentExperiences} = useContext(ExperiencesContext);
+    const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
+
+    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
+
+    useEffect(() => {
+        axios
+        .get(`${API_BASE_URL}/trips`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {updateTrips(res.data.trips);},[])
+        .catch(e => console.log(e))
+
+    },[]);
 
     return (  
         <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"95%",overflowY:"scroll"}}>
