@@ -10,8 +10,16 @@ function NavBar() {
     const handleShow = () => setShow(true);
   
     return (
-        <Row className="justify-content-md-center mb-3 p-2 border-bottom" style={{backgroundColor:"#3c6e71", height:"5%", maxHeight:"50px"}}>
-            <Col className='text-light' style={{fontSize:"24px"}}>
+        <Row 
+        className="justify-content-md-center mb-3 p-2 border-bottom" 
+        style={{
+            backgroundColor:"#3c6e71", 
+            height:"10%", 
+            maxHeight:"65px",
+            position: "sticky",
+            top: 0}}
+        >
+            <Col className='text-light' style={{fontSize:"25px"}}>
                Crowd Sourced Travel Planner
             </Col>
             <Col className='text-center'>
