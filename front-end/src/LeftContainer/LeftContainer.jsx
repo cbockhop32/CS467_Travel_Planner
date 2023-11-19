@@ -27,7 +27,7 @@ function LeftContainer() {
 
     return ( 
 
-        <ListGroup className='m-2 p-2'  style={{ height:"95%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
+        <ListGroup className='m-2 p-2'  style={{ height:"92%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
             {currentExperiences.map((experience, index) => {
                 return (<ExperienceTab key={index} id={index} name={experience.experience_name} location={"Somewhere"} />)
             })}
