@@ -6,7 +6,7 @@ import { ExperiencesContext } from '../Context/ExperiencesContext';
 
 
 
-function TripDetails({id,name,location,description}) {
+function DashboardTripDetails({id,name,location,description}) {
 
 
     return ( 
@@ -38,4 +38,4 @@ function TripDetails({id,name,location,description}) {
      );
 }
 
-export default TripDetails;
+export default DashboardTripDetails;

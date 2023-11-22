@@ -12,10 +12,10 @@ function MainContainer() {
                     <ExperiencesProvider>
                         <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
                             <Col lg={4} className='h-100'>
-                                <LeftContainer view={"experiences"}/>
+                                <LeftContainer view={"experiences"} dashboardView={false}/>
                             </Col>
                             <Col  lg={8} className='h-100'>
-                                <RightContainer  view={"experiences"} />
+                                <RightContainer  view={"experiences"} dashboardView={false} />
                             </Col>
                         </Row>
                     </ExperiencesProvider>

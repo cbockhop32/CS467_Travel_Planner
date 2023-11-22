@@ -24,11 +24,8 @@ function LeftContainer({view}) {
             })
             .then((res) => {updateExperiences(res.data.experiences);},[])
             .catch(e => console.log(e))
-
-
-    
        
-    });
+    },[]);
 
 
 

@@ -2,11 +2,12 @@ import React,{useContext,useEffect} from 'react'
 import { Tab } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
 import ExperienceDetails from '../ExperienceDetails/ExperienceDetails';
-import TripDetails from '../TripDetails/TripDetails';
+import DashboardTripDetails from '../DashboardTripDetails/DashboardTripDetails';
+import DashboardExperienceDetails from '../DashboardExperienceDetails/DashboardExperienceDetails';
 import axios from 'axios';
 
 
-function RightContainer({view}) {
+function RightContainer({view, dashboardView}) {
     const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
     const {currentTrips} = useContext(ExperiencesContext);
 
@@ -26,7 +27,7 @@ function RightContainer({view}) {
 
     },[]);
 
-    if(view == "experiences") {
+    if(view === "experiences" && dashboardView === false) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentExperiences.map((experience,index) => {
@@ -37,18 +38,28 @@ function RightContainer({view}) {
         );
 
 
-    } else if (view == "trips") {
+    } else if (view === "experiences" && dashboardView === true) {
+        return (  
+            <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
+                {currentExperiences.map((experience,index) => {
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardExperienceDetails  id = {index} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    )
+                })}
+            </Tab.Content>
+        );
+     
+
+    } else if (view === "trips") {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentTrips.map((trip,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><TripDetails  id = {index} name={trip.trip_name} location={"Somewhere"} description={trip.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {index} name={trip.trip_name} location={"Somewhere"} description={trip.description}/></Tab.Pane>
                     )
                 })}
             </Tab.Content>
         );
 
-
-    }
+    } 
 
   
 }

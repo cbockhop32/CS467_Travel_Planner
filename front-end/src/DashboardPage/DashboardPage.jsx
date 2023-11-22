@@ -13,32 +13,33 @@ function DashboardPage() {
  
     return ( 
 
-        <Row className='justify-content-md-center' style={{height:"85%"}}>
-
+<>
                  <Tabs
                   id="user-view"
                   activeKey={key}
                   onSelect={(k) => setKey(k)}
                   className="mb-3 w-50"
                   fill
+                  
                  >
 
 
                     <Tab eventKey="experiences" title="Experiences"  >
-
+                    <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
 
                             <Tab.Container  style={{ width:"100%"}}  >
                                 <ExperiencesProvider>
-                                    <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
-                                        <Col lg={4} className='h-100 overflow-hidden'>
+                                    <Row  className='justify-content-md-center h-100 ' style={{maxWidth:"1600px"}}  >
+                                        <Col lg={4} className='h-100 '>
                                             <LeftContainer view={"experiences"}/>
                                         </Col>
                                         <Col  lg={8} className='h-100'>
-                                            <RightContainer view={"experiences"} />
+                                            <RightContainer view={"experiences"} dashboardView={true} />
                                         </Col>
                                     </Row>
                                 </ExperiencesProvider>
                             </Tab.Container>
+                            </Row> 
 
                     </Tab>
 
@@ -46,6 +47,7 @@ function DashboardPage() {
 
                     <Tab eventKey="trips" title="Trips">
                         
+                        <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
 
                             <Tab.Container   style={{ width:"100%"}} >
                                 <ExperiencesProvider>
@@ -54,18 +56,20 @@ function DashboardPage() {
                                             <LeftContainer view={"trips"} />
                                         </Col>
                                         <Col  lg={8} className='h-100'>
-                                            <RightContainer view={"trips"} />
+                                            <RightContainer view={"trips"} dashboardView={true} />
                                         </Col>
                                     </Row>
                                 </ExperiencesProvider>
                             </Tab.Container>
 
+                        </Row> 
+
+
                     </Tab>
 
                 </Tabs>
-        </Row> 
 
-        
+                </>
          
      );
 }
