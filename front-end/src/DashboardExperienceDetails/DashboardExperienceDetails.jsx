@@ -36,8 +36,8 @@ function DashboardExperienceDetails({id,name,location,description}) {
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>
                     <Rating readonly={false} allowFraction={true} initialValue={4.5} />
-                    {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Trip</Button>):
-                    <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Trip</Button>}
+                    {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Experience</Button>):
+                    <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Experience</Button>}
                 </Col>
             </Row>
        

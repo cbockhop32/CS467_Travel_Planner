@@ -18,8 +18,7 @@ function DashboardPage() {
                   id="user-view"
                   activeKey={key}
                   onSelect={(k) => setKey(k)}
-                  className="mb-3 w-50"
-                  fill
+                  className="mb-3 w-100 d-flex justify-content-center"
                   
                  >
 
