@@ -23,8 +23,21 @@ function DashboardExperienceDetails({id,name,location,description}) {
         setEditing(!editing);
     }
 
-    const handleDelete = (id) => {
-        axios.delete(`${environment.api_url}/experiences/${id}`)
+    const handleUpdate = (exp_id) => {
+        axios.put(`${environment.api_url}/experiences/${exp_id}`,
+        {
+            experience_name: expName,
+            description: expDescription
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>console.log(e))
+
+        handleEdit();
+
+    }
+
+    const handleDelete = (exp_id) => {
+        axios.delete(`${environment.api_url}/experiences/${exp_id}`)
         .then((res) => {console.log(res)})
         .catch((e)=>console.log(e))
     };
@@ -44,9 +57,9 @@ function DashboardExperienceDetails({id,name,location,description}) {
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>
                     <Rating readonly={editing ? false : true} allowFraction={true} initialValue={4.5} />
-                    {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Experience</Button>):
+                    {editing ? (<Button onClick={() => {handleUpdate(id)}}   style={{marginLeft:"20px"}}>Save Experience</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Experience</Button>}
-                    <Button variant='danger' onClick={() => {handleDelete(id)}} style={{marginTop:"20px"}}>Delete Experience</Button>
+                    <Button variant='danger' disabled={editing ? true : false} onClick={() => {handleDelete(id)}} style={{marginTop:"20px"}}>Delete Experience</Button>
                 </Col>
             </Row>
        
