@@ -15,10 +15,6 @@ function DashboardTripDetails({id,name,location,description}) {
     const [show, setShow] = useState(false); // for the delete confirmation modal
     const {updateTrips} = useContext(ExperiencesContext);
 
-
-
-
-
     const handleEdit = () => {
         setEditing(!editing);
     }
@@ -26,7 +22,6 @@ function DashboardTripDetails({id,name,location,description}) {
     const handleClose = () => {
         setShow(false);
     }  
-
 
     const updateTripsList = () => {
         axios
@@ -39,7 +34,6 @@ function DashboardTripDetails({id,name,location,description}) {
         .then((res) => {updateTrips(res.data.trips);},[])
         .catch(e => console.log(e))
     }
-
 
     const handleDelete = (id) => {
         axios.delete(`${environment.api_url}/trips/${id}`)

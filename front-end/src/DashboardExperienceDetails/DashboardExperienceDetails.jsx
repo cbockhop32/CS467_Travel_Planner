@@ -19,7 +19,7 @@ function DashboardExperienceDetails({id,name,location,description}) {
     const [expCountry, updateExpCountry] = useInputState('');
     const [expDescription, updateExpDescription] = useInputState(description);
     const [show, setShow] = useState(false); // for the delete confirmation modal
-    const {currentExperiences, updateExperiences} = useContext(ExperiencesContext);
+    const {updateExperiences} = useContext(ExperiencesContext);
 
 
 
@@ -65,13 +65,8 @@ function DashboardExperienceDetails({id,name,location,description}) {
         })
         .catch((e)=>console.log(e))
 
-        
-
         handleClose();
-
     };
-
-
 
 
     return ( 

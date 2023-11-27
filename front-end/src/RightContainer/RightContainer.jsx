@@ -13,7 +13,6 @@ function RightContainer({view, dashboardView}) {
     const {currentTrips} = useContext(ExperiencesContext);
 
 
-
     useEffect(() => {
         axios
         .get(`${environment.api_url}/trips`,

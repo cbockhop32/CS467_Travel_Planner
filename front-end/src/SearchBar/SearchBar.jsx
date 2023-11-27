@@ -18,8 +18,6 @@ function SearchBar() {
     const [state, updateState, resetState] = useInputState('');
     const [country, updateCountry, resetCountry] = useInputState('');
     const [category, updateCategory] = useInputState('');
-
-
     const [lattitude, setLat] = useState('');
     const [longitude, setLon] = useState('');
 
@@ -55,7 +53,6 @@ function SearchBar() {
     };
 
 
-        
     // const handleAdd = () => {
     //     setShow(false);
     //     // pass the lat and lon once parameters are made in the back end
@@ -111,21 +108,22 @@ function SearchBar() {
                                         value={name}
                                         onChange={updateName}
                                     />
-                                <Form.Group className='mb-3'>
-                                    <Form.Label>Type of Activity</Form.Label>
-                                    <Form.Select
-                                     value={category}
-                                     onChange={updateCategory}>
-                                    <option>Select a Category</option>
-                                    <option>Food/Drink</option>
-                                    <option>Museum</option>
-                                    <option>Music</option>
-                                    <option>Park</option>
-                                    <option>Shopping</option>
-                                    <option>Sports</option>
-                                    <option>Tour</option>
-                                    <option>Other</option>
-                                    </Form.Select>                              </Form.Group>   
+                                    <Form.Group className='mb-3'>
+                                        <Form.Label>Type of Activity</Form.Label>
+                                        <Form.Select
+                                        value={category}
+                                        onChange={updateCategory}>
+                                        <option>Select a Category</option>
+                                        <option>Food/Drink</option>
+                                        <option>Museum</option>
+                                        <option>Music</option>
+                                        <option>Park</option>
+                                        <option>Shopping</option>
+                                        <option>Sports</option>
+                                        <option>Tour</option>
+                                        <option>Other</option>
+                                        </Form.Select>                              
+                                    </Form.Group>   
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
                                     <Form.Label>Location</Form.Label>

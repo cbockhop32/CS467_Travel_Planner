@@ -13,7 +13,7 @@ function DashboardPage() {
  
     return ( 
 
-<>
+            <>
                  <Tabs
                   id="user-view"
                   activeKey={key}
@@ -21,33 +21,25 @@ function DashboardPage() {
                   className="mb-3 w-100 d-flex justify-content-center"
                   
                  >
-
-
                     <Tab eventKey="experiences" title="Experiences"  >
                     <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
-
-                            <Tab.Container  style={{ width:"100%"}}  >
-                                <ExperiencesProvider>
-                                    <Row  className='justify-content-md-center h-100 ' style={{maxWidth:"1600px"}}  >
-                                        <Col lg={4} className='h-100 '>
-                                            <LeftContainer view={"experiences"}/>
-                                        </Col>
-                                        <Col  lg={8} className='h-100'>
-                                            <RightContainer view={"experiences"} dashboardView={true} />
-                                        </Col>
-                                    </Row>
-                                </ExperiencesProvider>
-                            </Tab.Container>
-                            </Row> 
-
+                        <Tab.Container  style={{ width:"100%"}}  >
+                            <ExperiencesProvider>
+                                <Row  className='justify-content-md-center h-100 ' style={{maxWidth:"1600px"}}  >
+                                    <Col lg={4} className='h-100 '>
+                                        <LeftContainer view={"experiences"}/>
+                                    </Col>
+                                    <Col  lg={8} className='h-100'>
+                                        <RightContainer view={"experiences"} dashboardView={true} />
+                                    </Col>
+                                </Row>
+                            </ExperiencesProvider>
+                        </Tab.Container>
+                        </Row> 
                     </Tab>
-
-
-
                     <Tab eventKey="trips" title="Trips">
                         
                         <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
-
                             <Tab.Container   style={{ width:"100%"}} >
                                 <ExperiencesProvider>
                                     <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
@@ -60,15 +52,10 @@ function DashboardPage() {
                                     </Row>
                                 </ExperiencesProvider>
                             </Tab.Container>
-
                         </Row> 
-
-
                     </Tab>
-
                 </Tabs>
-
-                </>
+            </>
          
      );
 }
