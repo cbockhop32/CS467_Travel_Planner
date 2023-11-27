@@ -1,6 +1,8 @@
 import React, {useContext, useState} from 'react'
 import { Container,Row, Col, Button,Form, Accordion } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
+import { environment } from '../Environments/EnvDev';
+import axios from 'axios';
 
 
 
@@ -17,6 +19,13 @@ function DashboardTripDetails({id,name,location,description}) {
         setEditing(!editing);
     }
 
+
+    const handleDelete = (id) => {
+        axios.delete(`${environment.api_url}/trips/${id}`)
+        .then((res) => {console.log(res)})
+        .catch((e)=>console.log(e))
+    };
+
     return ( 
 
         <Container className='h-100 w-100'>
@@ -32,6 +41,7 @@ function DashboardTripDetails({id,name,location,description}) {
                 <Col className='mt-2 text-end'   lg={6}>
                     {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Trip</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Trip</Button>}
+                    <Button variant='danger' onClick={() => {handleDelete(id)}}   style={{marginLeft:"20px"}}>Delete Trip</Button>
                 </Col>
           
             </Row>

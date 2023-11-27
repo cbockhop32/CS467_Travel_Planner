@@ -8,6 +8,10 @@ function NavBar() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
+    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
+
   
     return (
         <Row 
@@ -28,7 +32,8 @@ function NavBar() {
             <Col className='text-center'>
                  <Link className="m-2 link-dark" style={{cursor:"pointer"}} to="/">Home</Link>
                 <Link className="m-2 link-dark" style={{cursor:"pointer"}} to="/dashboard">My Dashboard</Link>
-                <a   onClick={handleShow} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a>
+                <a   href={API_BASE_URL + '/login'} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a>
+                {/* <a   onClick={handleShow} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a> */}
                 <UserLogin handleClose={handleClose} show={show} />
 
             </Col>

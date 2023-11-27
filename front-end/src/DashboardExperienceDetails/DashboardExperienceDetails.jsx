@@ -2,6 +2,8 @@ import React,{useState} from 'react'
 import { Container,Row, Col, Button,Form} from 'react-bootstrap';
 import useInputState from '../hooks/useInputState';
 import { Rating } from 'react-simple-star-rating'
+import { environment } from '../Environments/EnvDev';
+import axios from 'axios';
 
 
 
@@ -20,6 +22,12 @@ function DashboardExperienceDetails({id,name,location,description}) {
     const handleEdit = () => {
         setEditing(!editing);
     }
+
+    const handleDelete = (id) => {
+        axios.delete(`${environment.api_url}/experiences/${id}`)
+        .then((res) => {console.log(res)})
+        .catch((e)=>console.log(e))
+    };
     
     return ( 
         <Container className='h-100 w-100'>
@@ -35,9 +43,10 @@ function DashboardExperienceDetails({id,name,location,description}) {
                     </Form.Group>   
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>
-                    <Rating readonly={false} allowFraction={true} initialValue={4.5} />
+                    <Rating readonly={editing ? false : true} allowFraction={true} initialValue={4.5} />
                     {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Experience</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Experience</Button>}
+                    <Button variant='danger' onClick={() => {handleDelete(id)}} style={{marginTop:"20px"}}>Delete Experience</Button>
                 </Col>
             </Row>
        

@@ -3,11 +3,11 @@ import { ListGroup } from 'react-bootstrap';
 import ExperienceTab from '../ExperienceTab/ExperienceTab';
 import TripTab from '../TripTab/TripTab';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
+import { environment } from '../Environments/EnvDev';
 import axios from "axios";
 
 
 function LeftContainer({view}) {
-    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
     const {currentExperiences, updateExperiences} = useContext(ExperiencesContext);
     const {currentTrips, updateTrips} = useContext(ExperiencesContext);
@@ -16,7 +16,7 @@ function LeftContainer({view}) {
 
     useEffect(() => {
             axios
-            .get(`${API_BASE_URL}/experiences`,
+            .get(`${environment.api_url}/experiences`,
             {
                 headers: {
                     "Access-Control-Allow-Origin": "*",

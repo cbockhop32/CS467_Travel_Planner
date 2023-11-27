@@ -3,6 +3,7 @@ import {useLocation} from 'react-router-dom'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
 import useInputState from '../hooks/useInputState';
+import { environment } from '../Environments/EnvDev';
 import axios from 'axios';
 
 function SearchBar() {
@@ -21,7 +22,6 @@ function SearchBar() {
 
     const [lattitude, setLat] = useState('');
     const [longitude, setLon] = useState('');
-    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
     let currRoute = useLocation();
 
@@ -41,7 +41,7 @@ function SearchBar() {
         // pass the lat and lon once parameters are made in the back end
         geoLocation(city, state, country, setLat, setLon);
 
-        axios.post(`${API_BASE_URL}/experiences`,
+        axios.post(`${environment.api_url}/experiences`,
         {
             experience_name: name,
             description: description
@@ -54,6 +54,25 @@ function SearchBar() {
        resetFields();
     };
 
+
+        
+    // const handleAdd = () => {
+    //     setShow(false);
+    //     // pass the lat and lon once parameters are made in the back end
+    //     geoLocation(city, state, country, setLat, setLon);
+
+    //     axios.post(`${environment.api_url}/trips`,
+    //     {
+    //         trip_name: name,
+    //         description: description
+
+    //     })
+    //     .then((res) => {console.log(res)})
+    //     .catch((e)=>console.log(e))
+
+    //     // clear input fields
+    //    resetFields();
+    // };
 
     const handleShow = () => setShow(true);
     const handleClose = () => {
