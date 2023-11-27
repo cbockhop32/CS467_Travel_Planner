@@ -219,15 +219,22 @@ def trip_post():
         new_trip = datastore.entity.Entity(key=client.key(TRIPS))
         new_trip.update({
             "trip_name": content["trip_name"],
-            "description": content["description"]
+            "description": content["description"],
+            "owner": payload.get('sub')
         })
         client.put(new_trip)
         trip_id = new_trip.key.id
         trip_id = new_trip.key.id
-        new_trip.update({"self": f"https://updatethislater.com/trips/{trip_id}"})
+        new_trip.update({"self": f"https://travel-planner-467.wl.r.appspot.com/trips/{trip_id}"})
         client.put(new_trip)
         return jsonify(id=trip_id), 201
     elif request.method == 'GET':
+        try:
+            payload = verify_jwt(request)
+            owner_id = payload.get('sub')
+        except AuthError:
+            owner_id = None
+
         query = client.query(kind=TRIPS)
 
         trips = list(query.fetch())
@@ -242,6 +249,11 @@ def trip_post():
 
 @app.route('/trips/<trip_id>', methods=['GET', 'DELETE'])
 def trip(trip_id):
+    try:
+        payload = verify_jwt(request)
+    except AuthError as e:
+        return jsonify(error=e.error), 401
+
     trip_key = client.key(TRIPS, int(trip_id))
     trip = client.get(key=trip_key)
 
@@ -254,6 +266,11 @@ def trip(trip_id):
 
     if request.method == 'DELETE':
         try:
+            payload = verify_jwt(request)
+        except AuthError as e:
+            return jsonify(error=e.error), 401
+
+        try:
             client.delete(trip_key)
             return '', 204
         except Exception as e:
@@ -263,6 +280,11 @@ def trip(trip_id):
 
 @app.route('/trips/<trip_id>', methods=['PUT'])
 def update_trip(trip_id):
+    try:
+        payload = verify_jwt(request)
+    except AuthError as e:
+        return jsonify(error=e.error), 401
+
     trip_key = client.key(TRIPS, int(trip_id))
     trip = client.get(key=trip_key)
 
@@ -281,22 +303,72 @@ def update_trip(trip_id):
 
 
 # CRUD for experiences
+
+@app.route('/owners/<path:owner_id>/experiences', methods=['GET'])
+def get_public_experiences(owner_id):
+    try:
+        encoded_owner_id = urllib.parse.quote(owner_id, safe='')  # because the authO has the '|' in datastore
+        payload = verify_jwt(request)
+    except AuthError as e:
+        logging.error(f"JWT verification failed: {e.error}")
+        return jsonify([])
+
+    query = client.query(kind=EXPERIENCES)
+    query.add_filter('public', '=', True)
+    if 'sub' in payload and payload['sub'] == encoded_owner_id:
+        query.add_filter('owner', '=', encoded_owner_id)
+    experiences = list(query.fetch())
+
+    for experience in experiences:
+        experience['id'] = experience.key.id
+
+    logging.info(f"Retrieved experiences for owner {owner_id}: {experiences}")
+
+    return jsonify(experiences)
+
+
 @app.route('/experiences', methods=['POST', 'GET'])
 def experience_post():
     if request.method == 'POST':
+        try:
+            payload = verify_jwt(request)
+        except AuthError as e:
+            return jsonify(error=e.error), 401
+
         content = request.get_json()
         new_experience = datastore.entity.Entity(key=client.key(EXPERIENCES))
         new_experience.update({
             "experience_name": content["experience_name"],
-            "description": content["description"]
+            "activity_type": content["activity_type"],
+            "rating": content["rating"],
+            "address": content["address"],
+            "city": content["city"],
+            "country": content["country"],
+            "description": content["description"],
+            "public": content["public"],
+            "latitude": content["latitude"],
+            "longitude": content["longitude"],
+            "owner": payload.get('sub')
         })
         client.put(new_experience)
         experience_id = new_experience.key.id
-        new_experience.update({"self": f"https://updatethislater.com/experiences/{experience_id}"})
+        new_experience.update({"self": f"https://travel-planner-467.wl.r.appspot.com/experiences/{experience_id}"})
         client.put(new_experience)
         return jsonify(id=experience_id), 201
     elif request.method == 'GET':
+        try:
+            payload = verify_jwt(request)
+            owner_id = payload.get('sub')
+        except AuthError:
+            owner_id = None
+
         query = client.query(kind=EXPERIENCES)
+
+        # this will only show owners of logged in entities
+        if owner_id:
+            query.add_filter('owner', '=', owner_id)
+        else:
+            query.add_filter('public', '=', True)
 
         experiences = list(query.fetch())
         response = {
@@ -310,6 +382,11 @@ def experience_post():
 
 @app.route('/experiences/<experience_id>', methods=['GET', 'DELETE'])
 def experience(experience_id):
+    try:
+        payload = verify_jwt(request)
+    except AuthError as e:
+        return jsonify(error=e.error), 401
+
     experience_key = client.key(EXPERIENCES, int(experience_id))
     experience = client.get(key=experience_key)
 
@@ -322,6 +399,11 @@ def experience(experience_id):
 
     if request.method == 'DELETE':
         try:
+            payload = verify_jwt(request)
+        except AuthError as e:
+            return jsonify(error=e.error), 401
+
+        try:
             client.delete(experience_key)
             return '', 204
         except Exception as e:
@@ -331,6 +413,11 @@ def experience(experience_id):
 
 @app.route('/experiences/<experience_id>', methods=['PUT'])
 def update_experience(experience_id):
+    try:
+        payload = verify_jwt(request)
+    except AuthError as e:
+        return jsonify(error=e.error), 401
+
     experience_key = client.key(EXPERIENCES, int(experience_id))
     experience = client.get(key=experience_key)
 
@@ -341,7 +428,15 @@ def update_experience(experience_id):
 
     experience.update({
         "experience_name": content["experience_name"],
+        "activity_type": content["activity_type"],
+        "rating": content["rating"],
+        "address": content["address"],
+        "city": content["city"],
+        "country": content["country"],
         "description": content["description"],
+        "public": content["public"],
+        "latitude": content["latitude"],
+        "longitude": content["longitude"]
 
     })
     client.put(experience)
