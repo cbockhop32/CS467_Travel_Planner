@@ -182,10 +182,39 @@ def add_user_to_database(sub):
         new_user.update({"sub": sub})
         client.put(new_user)
 
+
 # CRUD for trips
+@app.route('/owners/<path:owner_id>/trips', methods=['GET'])
+def get_public_trips(owner_id):
+    try:
+        encoded_owner_id = urllib.parse.quote(owner_id, safe='')  # because the authO has the '|' in datastore
+        payload = verify_jwt(request)
+    except AuthError as e:
+        logging.error(f"JWT verification failed: {e.error}")
+        return jsonify([])
+
+    query = client.query(kind=TRIPS)
+    query.add_filter('public', '=', True)
+    if 'sub' in payload and payload['sub'] == encoded_owner_id:
+        query.add_filter('owner', '=', encoded_owner_id)
+    trips = list(query.fetch())
+
+    for trip in trips:
+        trip['id'] = trip.key.id
+
+    logging.info(f"Retrieved trips for owner {owner_id}: {trips}")
+
+    return jsonify(trips)
+
+
 @app.route('/trips', methods=['POST', 'GET'])
 def trip_post():
     if request.method == 'POST':
+        try:
+            payload = verify_jwt(request)
+        except AuthError as e:
+            return jsonify(error=e.error), 401
+
         content = request.get_json()
         new_trip = datastore.entity.Entity(key=client.key(TRIPS))
         new_trip.update({
