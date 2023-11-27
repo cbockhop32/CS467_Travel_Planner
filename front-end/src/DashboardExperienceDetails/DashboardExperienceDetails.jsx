@@ -1,8 +1,9 @@
-import React,{useState} from 'react'
-import { Container,Row, Col, Button,Form} from 'react-bootstrap';
+import React,{useState, useContext} from 'react'
+import { Container,Row, Col, Button,Form, Modal} from 'react-bootstrap';
 import useInputState from '../hooks/useInputState';
 import { Rating } from 'react-simple-star-rating'
 import { environment } from '../Environments/EnvDev';
+import { ExperiencesContext } from '../Context/ExperiencesContext';
 import axios from 'axios';
 
 
@@ -17,6 +18,10 @@ function DashboardExperienceDetails({id,name,location,description}) {
     const [expState, updateExpState] = useInputState('');
     const [expCountry, updateExpCountry] = useInputState('');
     const [expDescription, updateExpDescription] = useInputState(description);
+    const [show, setShow] = useState(false); // for the delete confirmation modal
+    const {currentExperiences, updateExperiences} = useContext(ExperiencesContext);
+
+
 
 
     const handleEdit = () => {
@@ -35,13 +40,40 @@ function DashboardExperienceDetails({id,name,location,description}) {
         handleEdit();
 
     }
+    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+    }  
+
+    const updateExperienceList = () => {
+        axios
+        .get(`${environment.api_url}/experiences`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {updateExperiences(res.data.experiences);},[])
+        .catch(e => console.log(e))
+    }
 
     const handleDelete = (exp_id) => {
         axios.delete(`${environment.api_url}/experiences/${exp_id}`)
-        .then((res) => {console.log(res)})
+        .then((res) => { 
+            console.log(res);
+            updateExperienceList();
+        })
         .catch((e)=>console.log(e))
+
+        
+
+        handleClose();
+
     };
-    
+
+
+
+
     return ( 
         <Container className='h-100 w-100'>
             <Row className='mb-1 text-start'>
@@ -59,10 +91,27 @@ function DashboardExperienceDetails({id,name,location,description}) {
                     <Rating readonly={editing ? false : true} allowFraction={true} initialValue={4.5} />
                     {editing ? (<Button onClick={() => {handleUpdate(id)}}   style={{marginLeft:"20px"}}>Save Experience</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Experience</Button>}
-                    <Button variant='danger' disabled={editing ? true : false} onClick={() => {handleDelete(id)}} style={{marginTop:"20px"}}>Delete Experience</Button>
+                    <Button variant='danger' disabled={editing ? true : false} onClick={handleShow} style={{marginTop:"20px"}}>Delete Experience</Button>
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                        <Modal.Title>Confirm Delete</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            <p>Are you sure you want to delete {name}?</p>
+                           
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={() => {handleDelete(id)}} >
+                            Delete
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Col>
             </Row>
-       
             <hr></hr>
 
             <Form>

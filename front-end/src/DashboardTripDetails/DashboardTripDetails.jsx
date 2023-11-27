@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import { Container,Row, Col, Button,Form, Accordion } from 'react-bootstrap';
+import { Container,Row, Col, Button,Form, Accordion, Modal } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
 import { environment } from '../Environments/EnvDev';
 import axios from 'axios';
@@ -12,18 +12,45 @@ function DashboardTripDetails({id,name,location,description}) {
     const [editing,setEditing] = useState(false);
     const [tripName,updateTripName] = useState(name);
     const [tripDescription,updateTripDescription] = useState(description);
+    const [show, setShow] = useState(false); // for the delete confirmation modal
+    const {updateTrips} = useContext(ExperiencesContext);
+
+
 
 
 
     const handleEdit = () => {
         setEditing(!editing);
     }
+    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+    }  
+
+
+    const updateTripsList = () => {
+        axios
+        .get(`${environment.api_url}/trips`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {updateTrips(res.data.trips);},[])
+        .catch(e => console.log(e))
+    }
 
 
     const handleDelete = (id) => {
         axios.delete(`${environment.api_url}/trips/${id}`)
-        .then((res) => {console.log(res)})
+        .then((res) => {
+            console.log(res);
+            updateTripsList();
+        })
         .catch((e)=>console.log(e))
+
+
+        handleClose();
     };
 
     return ( 
@@ -41,7 +68,25 @@ function DashboardTripDetails({id,name,location,description}) {
                 <Col className='mt-2 text-end'   lg={6}>
                     {editing ? (<Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Save Trip</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Trip</Button>}
-                    <Button variant='danger' onClick={() => {handleDelete(id)}}   style={{marginLeft:"20px"}}>Delete Trip</Button>
+                    <Button variant='danger' disabled={editing ? true : false} onClick={handleShow}   style={{marginLeft:"20px"}}>Delete Trip</Button>
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                        <Modal.Title>Confirm Delete</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            <p>Are you sure you want to delete {name}?</p>
+                           
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={() => {handleDelete(id)}} >
+                            Delete
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Col>
           
             </Row>
