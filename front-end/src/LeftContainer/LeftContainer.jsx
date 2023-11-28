@@ -9,8 +9,7 @@ import axios from "axios";
 
 function LeftContainer({view}) {
 
-    const {currentExperiences, updateExperiences} = useContext(ExperiencesContext);
-    const {currentTrips, updateTrips} = useContext(ExperiencesContext);
+    const {currentTrips,currentExperiences, updateExperiences} = useContext(ExperiencesContext);
 
 
 
@@ -23,7 +22,13 @@ function LeftContainer({view}) {
                 }
             })
             .then((res) => {updateExperiences(res.data.experiences);},[])
-            .catch(e => console.log(e))
+            .catch(e => {
+                if(e.response.status == 401) {
+                    console.log("Login to be able to add Experience")
+                }
+                
+                
+                console.log(e)})
        
     },[]);
 

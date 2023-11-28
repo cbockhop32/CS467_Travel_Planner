@@ -8,18 +8,22 @@ import DashboardPage from './DashboardPage/DashboardPage';
 import { BrowserRouter as Router, Routes, Route }
     from 'react-router-dom';
 
+import { ExperiencesProvider } from './Context/ExperiencesContext';
+
 
 
 function App() {
   return (
     <div className="App"  >
       <Router>
-        <NavBar />
-        <SearchBar />
-        <Routes>
-          <Route exact path ='/' element={<MainContainer />} />
-          <Route exact path ='/dashboard' element={<DashboardPage />} />
-        </Routes>
+        <ExperiencesProvider>
+          <NavBar />
+          <SearchBar />
+          <Routes>
+            <Route exact path ='/' element={<MainContainer />} />
+            <Route exact path ='/dashboard' element={<DashboardPage />} />
+          </Routes>
+        </ExperiencesProvider>
 
       </Router>
     </div>

@@ -4,6 +4,8 @@ import { Rating } from 'react-simple-star-rating'
 import ImageCarousel from '../ImageCarousel/ImageCarousel';
 import MapboxComponent from '../MapboxComponent/MapboxComponent';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
+import axios from 'axios';
+import { environment } from '../Environments/EnvDev';
 
 
 function ExperienceDetails({id, name, location,description}) {
@@ -13,7 +15,20 @@ function ExperienceDetails({id, name, location,description}) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+
+
+    const handleAddExperienceToTrip = (trip_id) => {
+        axios.get(`${environment.api_url}/trips/${trip_id}/add_experience`)
+        .then((res) => { 
+            console.log(res);
+        })
+        .catch((e)=>console.log(e))
+
+        handleClose();
+    };
+
     const handleDropdownSelect = (e) => {
+        console.log(e);
         setDropdownValue(e);
     }
 
@@ -39,13 +54,13 @@ function ExperienceDetails({id, name, location,description}) {
                         <Modal.Body>
                             <DropdownButton id="dropdown-basic-button" title={dropdownValue} onSelect={handleDropdownSelect}>
                                 {currentTrips.map((trip,index) => {
-                                    return (<Dropdown.Item key={index} href="#/action-1" eventKey={trip.trip_name}>{trip.trip_name}</Dropdown.Item>)
+                                    return (<Dropdown.Item key={index} id={trip.self.substring(trip.self.lastIndexOf('/')+1)} href="#/action-1" eventKey={trip.trip_name}>{trip.trip_name}</Dropdown.Item>)
                                 })}
                             </DropdownButton>
 
                         </Modal.Body>
                         <Modal.Footer>
-                        <Button variant="primary" onClick={handleClose}>
+                        <Button variant="primary" onClick={() => {handleAddExperienceToTrip()}}>
                             Add
                         </Button>
                         </Modal.Footer>
