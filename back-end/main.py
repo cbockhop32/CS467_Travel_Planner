@@ -247,6 +247,41 @@ def get_public_trips(owner_id):
     return jsonify(trips)
 
 
+@app.route('/trips/<trip_id>/add_experience', methods=['POST'])
+def add_experience_to_trip(trip_id):
+    try:
+        payload = verify_jwt(request)
+        user_sub = payload.get('sub')
+    except AuthError as e:
+        return jsonify(error=e.error), e.status_code
+
+    content = request.get_json()
+    experience_id = content.get('experience_id')
+
+    if not experience_id:
+        return jsonify({"error": "Experience ID is required"}), 400
+
+    trip_key = client.key(TRIPS, int(trip_id))
+    trip = client.get(key=trip_key)
+
+    if not trip:
+        return jsonify({"error": "Trip not found"}), 404
+
+    if trip.get('owner') != user_sub:
+        return jsonify({"error": "You do not have permission to modify this trip"}), 403
+
+    if 'experiences' not in trip:
+        trip['experiences'] = []
+
+    if experience_id not in trip['experiences']:
+        trip['experiences'].append(experience_id)
+        client.put(trip)
+        return jsonify({"success": "Experience added to trip"}), 200
+    else:
+        return jsonify({"error": "Experience already added to trip"}), 400
+
+
+
 @app.route('/trips', methods=['POST', 'GET'])
 def trip_post():
     if request.method == 'POST':
@@ -260,6 +295,7 @@ def trip_post():
         new_trip.update({
             "trip_name": content["trip_name"],
             "description": content["description"],
+            "experiences": [],
             "owner": payload.get('sub')
         })
         client.put(new_trip)
@@ -294,6 +330,7 @@ def trip(trip_id):
     except AuthError as e:
         return jsonify(error=e.error), 401
 
+    # Get the trip entity from Datastore
     trip_key = client.key(TRIPS, int(trip_id))
     trip = client.get(key=trip_key)
 
@@ -301,7 +338,22 @@ def trip(trip_id):
         return jsonify(error="Trip does not exist"), 404
 
     if request.method == 'GET':
-        trip['id'] = trip.key.id
+        # Initialize an empty list for associated experiences
+        associated_experiences = []
+
+        # Check if the trip has associated experiences
+        if 'experiences' in trip:
+            # Iterate over each experience ID and fetch the experience from Datastore
+            for exp_id in trip['experiences']:
+                experience_key = client.key(EXPERIENCES, int(exp_id))
+                experience = client.get(key=experience_key)
+                if experience:
+                    # Add the experience data to the associated experiences list
+                    associated_experiences.append(experience)
+
+        # Add the associated experiences to the trip's data
+        trip['associated_experiences'] = associated_experiences
+
         return jsonify(trip)
 
     if request.method == 'DELETE':
@@ -397,6 +449,37 @@ def upload_experience_image(experience_id):
         client.put(experience)
 
         return jsonify(image_url=image_url), 200
+
+
+@app.route('/experiences/search', methods=['GET'])
+def search_experiences():
+    # Get the keyword and location from query params
+    keyword = request.args.get('keyword', '').lower()
+    city = request.args.get('city', '').lower()
+    country = request.args.get('country', '').lower()
+
+    # Build the query
+    query = client.query(kind=EXPERIENCES)
+    query.add_filter('public', '=', True)
+
+    # Fetch all the experiences first
+    experiences = list(query.fetch())
+
+    # Filter experiences by keyword and location
+    filtered_experiences = [exp for exp in experiences if
+                            keyword in exp['description'].lower() or keyword in exp['experience_name'].lower()]
+
+    # If city or country filters are set, apply them
+    if city:
+        filtered_experiences = [exp for exp in filtered_experiences if city == exp['city'].lower()]
+    if country:
+        filtered_experiences = [exp for exp in filtered_experiences if country == exp['country'].lower()]
+
+    # Add id to experiences
+    for experience in filtered_experiences:
+        experience['id'] = experience.key.id
+
+    return jsonify(filtered_experiences)
 
 
 @app.route('/experiences', methods=['POST', 'GET'])
