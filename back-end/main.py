@@ -604,7 +604,10 @@ def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
     add_user_to_database(token.get("sub"))
-    return redirect("/dashboard")
+
+    #Redirect to React dashboard
+    react_dashboard_url = "http://localhost:3000/dashboard"
+    return redirect(react_dashboard_url)
 
 
 # Decode the JWT supplied in the Authorization header
