@@ -1,13 +1,15 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from google.cloud import datastore
+from google.cloud import storage, datastore
 from flask import Flask, request, jsonify, _request_ctx_stack, render_template, redirect
 import requests
 import logging
 import urllib.parse
 from urllib.parse import quote_plus
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
+import os
 
 from functools import wraps
 import json
@@ -35,12 +37,17 @@ CORS(app)
 
 app.secret_key = 'SECRET_KEY'
 
-#initialize Datastore
+#initialize GCP Datastore
 client = datastore.Client()
+
+# initialize GCP Storage
+storage_client = storage.Client()
 
 TRIPS = "trips"
 EXPERIENCES = "experiences"
 USERS = "users"
+
+GCS_BUCKET = 'experience-bucket'
 
 
 # Update the values of the following 3 variables
@@ -165,6 +172,39 @@ def index():
 @app.route('/test')
 def test_route():
     return 'Test route is working'
+
+
+# image uploading
+def make_bucket_public(bucket_name):
+    """Makes a bucket publicly readable."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(experience-bucket)
+
+    policy = bucket.get_iam_policy(requested_policy_version=3)
+    policy.bindings.append({
+        'role': 'roles/storage.objectViewer',
+        'members': ['allUsers'],
+    })
+
+    bucket.set_iam_policy(policy)
+
+    print(f'Bucket {bucket.name} is now publicly readable')
+
+
+def upload_image_to_gcs(image_file, bucket_name):
+    """Uploads the image to Google Cloud Storage and returns the public url"""
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(secure_filename(image_file.filename))
+
+    blob.upload_from_file(image_file)
+
+    return blob.public_url
+
+from google.cloud import storage
+
+
+
 
 
 @app.route("/dashboard")
@@ -325,6 +365,38 @@ def get_public_experiences(owner_id):
     logging.info(f"Retrieved experiences for owner {owner_id}: {experiences}")
 
     return jsonify(experiences)
+
+# endpoint for images
+@app.route('/experiences/<experience_id>/image', methods=['POST'])
+def upload_experience_image(experience_id):
+    """Endpoint to upload an image for a specific experience"""
+    try:
+        payload = verify_jwt(request)
+    except AuthError as e:
+        return jsonify(error=e.error), 401
+
+    # Check if the post request has the file part
+    if 'file' not in request.files:
+        return jsonify(error="No file part"), 400
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify(error="No selected file"), 400
+    if file:
+        image_url = upload_image_to_gcs(file, GCS_BUCKET)
+
+        # Update the datastore entity with the image URL
+        client = datastore.Client()
+        key = client.key(EXPERIENCES, int(experience_id))
+        experience = client.get(key)
+
+        if experience is None:
+            return jsonify(error="Experience does not exist"), 404
+
+        experience['image_url'] = image_url
+        client.put(experience)
+
+        return jsonify(image_url=image_url), 200
 
 
 @app.route('/experiences', methods=['POST', 'GET'])
