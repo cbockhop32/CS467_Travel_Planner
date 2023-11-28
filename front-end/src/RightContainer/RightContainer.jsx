@@ -2,17 +2,20 @@ import React,{useContext,useEffect} from 'react'
 import { Tab } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
 import ExperienceDetails from '../ExperienceDetails/ExperienceDetails';
+import DashboardTripDetails from '../DashboardTripDetails/DashboardTripDetails';
+import DashboardExperienceDetails from '../DashboardExperienceDetails/DashboardExperienceDetails';
+import { environment } from '../Environments/EnvDev';
 import axios from 'axios';
 
 
-function RightContainer() {
+function RightContainer({view, dashboardView}) {
     const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
+    const {currentTrips} = useContext(ExperiencesContext);
 
-    const API_BASE_URL = 'https://travel-planner-467.wl.r.appspot.com';
 
     useEffect(() => {
         axios
-        .get(`${API_BASE_URL}/trips`,
+        .get(`${environment.api_url}/trips`,
         {
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -23,14 +26,41 @@ function RightContainer() {
 
     },[]);
 
-    return (  
-        <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
-            {currentExperiences.map((experience,index) => {
-                return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  id = {index} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
-                )
-            })}
-      </Tab.Content>
-    );
+    if(view === "experiences" && dashboardView === false) {
+        return (  
+            <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
+                {currentExperiences.map((experience,index) => {
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    )
+                })}
+            </Tab.Content>
+        );
+
+
+    } else if (view === "experiences" && dashboardView === true) {
+        return (  
+            <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
+                {currentExperiences.map((experience,index) => {
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardExperienceDetails  id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    )
+                })}
+            </Tab.Content>
+        );
+     
+
+    } else if (view === "trips") {
+        return (  
+            <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
+                {currentTrips.map((trip,index) => {
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} name={trip.trip_name} location={"Somewhere"} description={trip.description}/></Tab.Pane>
+                    )
+                })}
+            </Tab.Content>
+        );
+
+    } 
+
+  
 }
 
 export default RightContainer;
