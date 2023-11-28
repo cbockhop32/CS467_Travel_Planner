@@ -52,7 +52,7 @@ GCS_BUCKET = 'experience-bucket'
 
 # Update the values of the following 3 variables
 CLIENT_ID = 'W7GjTXrtLQHvXCAHkArWBDjuLZ8qWDmo'
-CLIENT_SECRET = 'W7GjTXrtLQHvXCAHkArWBDjuLZ8qWDmo'
+CLIENT_SECRET = 'IXUDyQbH9ftnbICks8pBxQUGQ3h0i2lt1bRJidw5j6b6C8M2Z9L38SJRa3HaFn_S'
 DOMAIN = 'crowd-source-travel-planner.us.auth0.com'
 
 ALGORITHMS = ["RS256"]
