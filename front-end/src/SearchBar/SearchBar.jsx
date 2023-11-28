@@ -43,6 +43,8 @@ function SearchBar() {
         handleRatingReset();
     }
 
+
+
     const handleSearch = (keywords) => {
         axios.get(`${environment.api_url}/experiences/search?keyword=${keywords}`)
         .then((res) => {
@@ -54,8 +56,6 @@ function SearchBar() {
         if(keywords === '') {
             resetSearchKeywords();
         }
-
-
     }
     
     const handleAdd = () => {
@@ -64,6 +64,8 @@ function SearchBar() {
         if(city !== "" || state !== "" || country !== "") {
             geoLocation(city, state, country, setLat, setLon);
         }
+
+        // POST request to add the experience
 
         axios.post(`${environment.api_url}/experiences`,
         {
@@ -84,9 +86,24 @@ function SearchBar() {
             console.log(e)
         })
 
+        // the response from the first post to add the experience returns the Experience ID, use that for
+        // the post below to add the image
+
+        // POST request to add the image
+        axios.post(`${environment.api_url}/experiences/103757536788480/image`,
+        {
+            file: file
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>{
+            console.log(e)
+        })
+
         // clear input fields
        resetFields();
     };
+
+    
 
 
     // const handleAdd = () => {
