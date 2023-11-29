@@ -28,7 +28,7 @@ function SearchBar() {
     const [error, setError] = useState(null) // for image input
 
     // Context for updating experiences
-    const {currentExperiences, updateExperiences} = useContext(ExperiencesContext);
+    const {currentExperiences,token, updateExperiences} = useContext(ExperiencesContext);
 
 
     let currRoute = useLocation();
@@ -57,6 +57,12 @@ function SearchBar() {
             resetSearchKeywords();
         }
     }
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+    // console.log(headers)
     
     const handleAdd = () => {
         setShow(false);
@@ -66,17 +72,21 @@ function SearchBar() {
         }
 
         // POST request to add the experience
-
         axios.post(`${environment.api_url}/experiences`,
+        {   
+                experience_name: name,
+                description: description,
+                address: address,
+                city: city,
+                country: country,
+                latitude: latitude,
+                longitude: longitude,
+                activity_type: category,
+                rating: rating,
+                public: true
+        },
         {
-            experience_name: name,
-            description: description,
-            city: city,
-            country: country,
-            latitude: latitude,
-            longitude: longitude,
-            activity_type: category,
-            rating: rating
+            headers: headers
         })
         .then((res) => {console.log(res)})
         .catch((e)=>{
@@ -90,14 +100,16 @@ function SearchBar() {
         // the post below to add the image
 
         // POST request to add the image
-        axios.post(`${environment.api_url}/experiences/103757536788480/image`,
-        {
-            file: file
-        })
-        .then((res) => {console.log(res)})
-        .catch((e)=>{
-            console.log(e)
-        })
+
+
+        // axios.post(`${environment.api_url}/experiences/103757536788480/image`,
+        // {
+        //     file: file
+        // })
+        // .then((res) => {console.log(res)})
+        // .catch((e)=>{
+        //     console.log(e)
+        // })
 
         // clear input fields
        resetFields();

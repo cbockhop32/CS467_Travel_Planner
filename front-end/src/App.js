@@ -15,17 +15,19 @@ import { ExperiencesProvider } from './Context/ExperiencesContext';
 function App() {
   return (
     <div className="App"  >
-      <Router>
-        <ExperiencesProvider>
-          <NavBar />
-          <SearchBar />
-          <Routes>
-            <Route exact path ='/' element={<MainContainer />} />
-            <Route exact path ='/dashboard' element={<DashboardPage />} />
-          </Routes>
-        </ExperiencesProvider>
+      <ExperiencesProvider>
 
-      </Router>
+        <Router>
+            <NavBar />
+            <SearchBar />
+            <Routes>
+              <Route exact path ='/' element={<MainContainer />} />
+              <Route exact path ='/dashboard' element={<DashboardPage />} />
+            </Routes>
+
+        </Router>
+      </ExperiencesProvider>
+
     </div>
   );
 }

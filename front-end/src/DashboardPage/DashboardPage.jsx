@@ -5,13 +5,15 @@ import RightContainer from '../RightContainer/RightContainer';
 import { ExperiencesProvider } from '../Context/ExperiencesContext';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { environment } from '../Environments/EnvDev';
 
 
 
 function DashboardPage() {
     const [key, setKey] = useState('experiences');
- 
-    return ( 
+
+
+        return ( 
 
             <>
                  <Tabs
@@ -58,6 +60,10 @@ function DashboardPage() {
             </>
          
      );
+        
+    
+        
+    
 }
 
 export default DashboardPage;

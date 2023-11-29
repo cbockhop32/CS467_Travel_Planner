@@ -9,20 +9,28 @@ import axios from 'axios';
 
 
 
-function DashboardExperienceDetails({id,name,location,description}) {
+function DashboardExperienceDetails({id,name,description,address,city,country,latitude,longitude,activity_type,rating}) {
     const [editing,setEditing] = useState(false);
     const [expName, updateExpName] = useInputState(name);
-    const [expLocation, updateExpLocation] = useInputState(location);
-    const [expType, updateExpType] = useInputState('');
-    const [expCity, updateExpCity] = useInputState('');
+    const [expAddress, updateExpAddress] = useInputState(address);
+    const [expType, updateExpType] = useInputState(activity_type);
+    const [expCity, updateExpCity] = useInputState(city);
     const [expState, updateExpState] = useInputState('');
-    const [expCountry, updateExpCountry] = useInputState('');
+    const [expCountry, updateExpCountry] = useInputState(country);
+    const [expLat, updateExpLat] = useInputState(latitude);
+    const [expLon, updateExpLon] = useInputState(longitude);
     const [expDescription, updateExpDescription] = useInputState(description);
+    const [expRating, setExpRating] = useState(rating)
+
+    
     const [show, setShow] = useState(false); // for the delete confirmation modal
     const {updateExperiences} = useContext(ExperiencesContext);
 
 
-
+   const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
 
     const handleEdit = () => {
         setEditing(!editing);
@@ -32,7 +40,18 @@ function DashboardExperienceDetails({id,name,location,description}) {
         axios.put(`${environment.api_url}/experiences/${exp_id}`,
         {
             experience_name: expName,
-            description: expDescription
+            description: expDescription,
+            address: expAddress,
+            city: expCity,
+            country: expCountry,
+            latitude: expLat,
+            longitude: expLon,
+            activity_type: expType,
+            rating: expRating,
+            public: true
+        },
+        {
+            headers: headers
         })
         .then((res) => {console.log(res)})
         .catch((e)=>console.log(e))
@@ -58,7 +77,11 @@ function DashboardExperienceDetails({id,name,location,description}) {
     }
 
     const handleDelete = (exp_id) => {
-        axios.delete(`${environment.api_url}/experiences/${exp_id}`)
+        axios.delete(`${environment.api_url}/experiences/${exp_id}`,
+        {
+            headers:headers
+        }
+        )
         .then((res) => { 
             console.log(res);
             updateExperienceList();
@@ -67,6 +90,12 @@ function DashboardExperienceDetails({id,name,location,description}) {
 
         handleClose();
     };
+
+    const handleRating = (rate) => {
+        setExpRating(rate)
+    
+        // other logic
+      }
 
 
     return ( 
@@ -77,13 +106,10 @@ function DashboardExperienceDetails({id,name,location,description}) {
                         <Form.Label>Name</Form.Label>
                         <Form.Control  value={expName} disabled={!editing} onChange={updateExpName} />
                     </Form.Group>
-                    <Form.Group as={Row} controlId="address">
-                        <Form.Label>Location</Form.Label>
-                        <Form.Control value={expLocation} disabled={!editing} onChange={updateExpLocation} />
-                    </Form.Group>   
+               
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>
-                    <Rating readonly={editing ? false : true} allowFraction={true} initialValue={4.5} />
+                    <Rating readonly={editing ? false : true} allowFraction={true} initialValue={expRating} onClick={handleRating} />
                     {editing ? (<Button onClick={() => {handleUpdate(id)}}   style={{marginLeft:"20px"}}>Save Experience</Button>):
                     <Button onClick={handleEdit}   style={{marginLeft:"20px"}}>Edit Experience</Button>}
                     <Button variant='danger' disabled={editing ? true : false} onClick={handleShow} style={{marginTop:"20px"}}>Delete Experience</Button>
@@ -113,7 +139,7 @@ function DashboardExperienceDetails({id,name,location,description}) {
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="address">
                         <Form.Label>Address</Form.Label>
-                        <Form.Control  placeholder="Enter Address" disabled={!editing}/>
+                        <Form.Control  placeholder="Enter Address" value={expAddress} onChange={updateExpAddress} disabled={!editing}/>
                     </Form.Group>
                     <Form.Group as={Col} controlId="type">
                         <Form.Label>Activity Type</Form.Label>

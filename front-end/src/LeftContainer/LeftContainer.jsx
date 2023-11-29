@@ -9,30 +9,43 @@ import axios from "axios";
 
 function LeftContainer({view}) {
 
-    const {currentTrips,currentExperiences, updateExperiences} = useContext(ExperiencesContext);
+    const {token,currentTrips,currentExperiences, updateExperiences,updateToken} = useContext(ExperiencesContext);
 
-    const [token, setToken_] = useState(localStorage.getItem("token"));
 
 
     useEffect(() => {
-            axios
-            .get(`${environment.api_url}/experiences`,
-            {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                }
-            })
-            .then((res) => {updateExperiences(res.data.experiences);},[])
-            .catch(e => {
-                if(e.response.status == 401) {
-                    console.log("Login to be able to add Experience")
-                }
-                console.log(e)})
+        axios
+        .get(`${environment.api_url}/experiences`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {updateExperiences(res.data.experiences);},[])
+        .catch(e => {
+            if(e.response.status == 401) {
+                console.log("Login to be able to add Experience")
+            }
+            console.log(e)})
+
+        // grab token
+        const currPath = window.location.pathname
+        const tokenUrl = window.location.href.indexOf('token') // checking if there is token within the url path
+
+        if(currPath === '/dashboard' && tokenUrl > -1){
+            const currUrl = window.location.href
+            const userToken = currUrl.substring(currUrl.lastIndexOf('=')+1)
+            // console.log(userToken)
+
+            const localStorageToken = localStorage.getItem('access_token')
+
+            if(localStorageToken === null) {
+                localStorage.setItem('access_token', userToken);
+
+            }
 
 
-            console.log(token)
-                
-        
+        }     
     },[]);
 
 
@@ -41,7 +54,13 @@ function LeftContainer({view}) {
         return (
                 <ListGroup className='m-2 p-2'  style={{ height:"92%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
                     {currentExperiences.map((experience, index) => {
-                        return (<ExperienceTab key={index} id={index} name={experience.experience_name} location={"Somewhere"} />)
+                        return (<ExperienceTab 
+                            key={index} 
+                            id={index} 
+                            name={experience.experience_name} 
+                            city={experience.city} 
+                            country={experience.country} 
+                            rating={experience.rating} />)
                         })}
                 </ListGroup>
         );
@@ -51,7 +70,7 @@ function LeftContainer({view}) {
         return(
         <ListGroup className='m-2 p-2'  style={{ height:"92%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
         {currentTrips.map((trip, index) => {
-            return (<TripTab key={index} id={index} name={trip.trip_name} location={"Somewhere"} />)
+            return (<TripTab key={index} id={index} name={trip.trip_name}  />)
             })}
             </ListGroup>
         );
