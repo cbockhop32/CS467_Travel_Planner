@@ -605,9 +605,13 @@ def callback():
     session["user"] = token
     add_user_to_database(token.get("sub"))
 
-    #Redirect to React dashboard
-    react_dashboard_url = "http://localhost:3000/dashboard"
+    # checks that 'id_token' is present in the response
+    if 'id_token' not in token:
+        return "ID Token not found in response", 401
+
+    react_dashboard_url = f"http://localhost:3000/dashboard?token={token['id_token']}"
     return redirect(react_dashboard_url)
+
 
 
 # Decode the JWT supplied in the Authorization header
