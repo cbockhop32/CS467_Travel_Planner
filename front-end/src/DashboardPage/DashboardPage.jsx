@@ -1,16 +1,58 @@
 import React,{useState} from 'react'
-import {Row, Col, Container} from 'react-bootstrap';
+import {Row, Col, Container, Button, Modal, Form} from 'react-bootstrap';
 import LeftContainer from '../LeftContainer/LeftContainer';
 import RightContainer from '../RightContainer/RightContainer';
 import { ExperiencesProvider } from '../Context/ExperiencesContext';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import useInputState from '../hooks/useInputState';
 import { environment } from '../Environments/EnvDev';
+import axios from 'axios';
 
 
 
 function DashboardPage() {
     const [key, setKey] = useState('experiences');
+    const [show, setShow] = useState(false);
+    const [name, updateName, resetName] = useInputState('');
+    const [description, updateDescription, resetDescription] = useInputState('');
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+
+    const handleShow = () => setShow(true);
+
+    const handleClose = () => {
+        setShow(false);
+        // clear input fields
+        // resetFields();
+    }  
+
+    
+    const handleAddTrip = () => {
+        axios.post(`${environment.api_url}/trips`,
+        {   
+                trip_name: name,
+                description: description,
+        },
+        {
+            headers: headers
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>{
+            if(e.response.status === 401) {
+                alert("Please login or create an account inorder to add a Trip")
+            }
+            console.log(e)
+        })
+
+        handleClose();
+
+
+    }
+
 
 
         return ( 
@@ -40,23 +82,65 @@ function DashboardPage() {
                         </Row> 
                     </Tab>
                     <Tab eventKey="trips" title="Trips">
+
+                    <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
+
+                        <Row className='justify-content-center'>                     
+                            <Button variant="primary" className='w-25'  onClick={handleShow}>Add Trip</Button>
+                        </Row>
+                        <Modal show={show} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                            <Modal.Title>Add A Trip</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                    <Form.Group className='mb-3'>
+                                        <Form.Label>Name of Trip</Form.Label>
+                                        <Form.Control 
+                                            value={name}
+                                            onChange={updateName}
+                                        />
+                            
+                                    </Form.Group>
+                            
+                                    <Form.Group className='mb-3'>
+                                        <Form.Label>Description</Form.Label>
+                                        <Form.Control as="textarea" rows={3} 
+                                               value={description}
+                                               onChange={updateDescription}
+                                        />
+                                    </Form.Group>
+                                
+                                </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={handleAddTrip} >
+                                Add
+                            </Button>
+                            </Modal.Footer>
+                        </Modal>
                         
-                        <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
-                            <Tab.Container   style={{ width:"100%"}} >
-                                <ExperiencesProvider>
-                                    <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
-                                        <Col lg={4} className='h-100'>
-                                            <LeftContainer view={"trips"} />
-                                        </Col>
-                                        <Col  lg={8} className='h-100'>
-                                            <RightContainer view={"trips"} dashboardView={true} />
-                                        </Col>
-                                    </Row>
-                                </ExperiencesProvider>
-                            </Tab.Container>
-                        </Row> 
+                        <Tab.Container   style={{ width:"100%"}} >
+                            <ExperiencesProvider>
+                                <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
+                                    <Col lg={4} className='h-100'>
+                                        <LeftContainer view={"trips"} />
+                                    </Col>
+                                    <Col  lg={8} className='h-100'>
+                                        <RightContainer view={"trips"} dashboardView={true} />
+                                    </Col>
+                                </Row>
+                            </ExperiencesProvider>
+                        </Tab.Container>
+                    </Row> 
                     </Tab>
                 </Tabs>
+           
+
+
             </>
          
      );

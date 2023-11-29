@@ -12,13 +12,27 @@ function ExperienceDetails({id, name, location,description}) {
     const {currentTrips} = useContext(ExperiencesContext);
     const [show, setShow] = useState(false);
     const [dropdownValue, setDropdownValue] = useState('Choose Trip');
+    const [currSelectedID, setCurrSelectedID] = useState(null);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    // console.log(currSelectedID)
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
 
     const handleAddExperienceToTrip = (trip_id) => {
-        axios.get(`${environment.api_url}/trips/${trip_id}/add_experience`)
+        axios.post(`${environment.api_url}/trips/${trip_id}/add_experience`,
+        {
+            experience_id: id,
+            public: true
+        },
+        {
+            headers: headers
+        })
         .then((res) => { 
             console.log(res);
         })
@@ -28,7 +42,7 @@ function ExperienceDetails({id, name, location,description}) {
     };
 
     const handleDropdownSelect = (e) => {
-        console.log(e);
+        // console.log(e);
         setDropdownValue(e);
     }
 
@@ -54,13 +68,13 @@ function ExperienceDetails({id, name, location,description}) {
                         <Modal.Body>
                             <DropdownButton id="dropdown-basic-button" title={dropdownValue} onSelect={handleDropdownSelect}>
                                 {currentTrips.map((trip,index) => {
-                                    return (<Dropdown.Item key={index} id={trip.self.substring(trip.self.lastIndexOf('/')+1)} href="#/action-1" eventKey={trip.trip_name}>{trip.trip_name}</Dropdown.Item>)
+                                    return (<Dropdown.Item key={index} onClick={()=> setCurrSelectedID(trip.self.substring(trip.self.lastIndexOf('/')+1))} id={trip.self.substring(trip.self.lastIndexOf('/')+1)} href="#/action-1" eventKey={trip.trip_name}>{trip.trip_name}</Dropdown.Item>)
                                 })}
                             </DropdownButton>
 
                         </Modal.Body>
                         <Modal.Footer>
-                        <Button variant="primary" onClick={() => {handleAddExperienceToTrip()}}>
+                        <Button variant="primary" onClick={() => {handleAddExperienceToTrip(currSelectedID)}}>
                             Add
                         </Button>
                         </Modal.Footer>
