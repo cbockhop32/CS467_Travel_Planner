@@ -18,7 +18,7 @@ function DashboardTripDetails({id,name,description,experiences}) {
     const [show, setShow] = useState(false); // for the delete confirmation modal
     const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
 
-    console.log(experiences)
+    // console.log(experiences)
 
     const headers = {
         'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ function DashboardTripDetails({id,name,description,experiences}) {
                     <Form.Control
                         as="textarea"
                         value={tripDescription}
-                        style={{ height: '100px' }}
+                        style={{ height: '100px'}}
                         disabled={!editing}
                         onChange={updateTripDescription}
                         />

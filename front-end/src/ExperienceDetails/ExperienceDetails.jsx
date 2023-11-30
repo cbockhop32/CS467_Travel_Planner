@@ -8,7 +8,7 @@ import axios from 'axios';
 import { environment } from '../Environments/EnvDev';
 
 
-function ExperienceDetails({id, name, location,description}) {
+function ExperienceDetails({id, name, location,description, address, city,country, latitude, longitude,rating, img_url}) {
     const {currentTrips} = useContext(ExperiencesContext);
     const [show, setShow] = useState(false);
     const [dropdownValue, setDropdownValue] = useState('Choose Trip');
@@ -58,7 +58,7 @@ function ExperienceDetails({id, name, location,description}) {
                     </Row>    
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>
-                    <Rating readonly={true} allowFraction={true} initialValue={4.5} />
+                    <Rating readonly={true} allowFraction={true} initialValue={rating} />
                     <Button onClick={handleShow} style={{marginLeft:"20px"}}>Add To Trip</Button>
 
                     <Modal show={show} onHide={handleClose}>
@@ -84,10 +84,10 @@ function ExperienceDetails({id, name, location,description}) {
             </Row>
             <Row className='h-50 mb-2'>
                 <Col lg={7} >
-                    <ImageCarousel/>
+                    <ImageCarousel image_url={img_url}/>
                 </Col>
                 <Col id="mapbox" lg={5} >
-                    <MapboxComponent></MapboxComponent>
+                    <MapboxComponent lat={latitude} lon={longitude}></MapboxComponent>
                 </Col>
             </Row>
             <hr></hr>
@@ -98,7 +98,7 @@ function ExperienceDetails({id, name, location,description}) {
             <Row className='m-2'>
                 <Col>
                     <Row  style={{display:"inline"}}>
-                        <b>Address: </b>18 Marina Gardens Drive Singapore 018953
+                        <b>Address: </b>{address + " " + city + ", " +country}
                     </Row>
                     <br></br>
                     <Row  style={{display:"inline"}}>

@@ -13,6 +13,8 @@ function NavBar() {
 
     const accessToken = localStorage.getItem('access_token')
 
+    console.log(accessToken)
+
     const handleLogout = () => {
         localStorage.removeItem('access_token')
     }

@@ -22,13 +22,14 @@ function SearchBar() {
     const [country, updateCountry, resetCountry] = useInputState('');
     const [category, updateCategory] = useInputState('');
     const [rating, setRating] = useState(0)
-    const [latitude, setLat] = useState('');
-    const [longitude, setLon] = useState('');
+    const [latitude, setLat] = useState(0);
+    const [longitude, setLon] = useState(0);
     const [file, setFile] = useState(null); // for image input
     const [error, setError] = useState(null) // for image input
+    const [newExpID, setNewExpID] = useInputState('');
 
     // Context for updating experiences
-    const {currentExperiences,token, updateExperiences} = useContext(ExperiencesContext);
+    const {currentExperiences,updateExperiences} = useContext(ExperiencesContext);
 
 
     let currRoute = useLocation();
@@ -41,6 +42,8 @@ function SearchBar() {
         resetState();
         resetCountry();
         handleRatingReset();
+        setLat(0);
+        setLon(0);
     }
 
 
@@ -58,18 +61,20 @@ function SearchBar() {
         }
     }
 
+
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
     }
     // console.log(headers)
     
-    const handleAdd = () => {
+    async function handleAdd(){
         setShow(false);
         // pass the lat and lon once parameters are made in the back end
-        if(city !== "" || state !== "" || country !== "") {
-            geoLocation(city, state, country, setLat, setLon);
-        }
+        // if(city !== "" || state !== "" || country !== "") {
+        //      await geoLocation(city, state, country, setLat, setLon);
+        // }
+        
 
         // POST request to add the experience
         axios.post(`${environment.api_url}/experiences`,
@@ -88,7 +93,14 @@ function SearchBar() {
         {
             headers: headers
         })
-        .then((res) => {console.log(res)})
+        .then((res) => {
+            
+            console.log(res.data.id)
+            handleImageRequest(res.data.id)
+
+            // Need to update experience list
+        
+        })
         .catch((e)=>{
             if(e.response.status === 401) {
                 alert("Please login or create an account inorder to add an Experience")
@@ -98,43 +110,10 @@ function SearchBar() {
 
         // the response from the first post to add the experience returns the Experience ID, use that for
         // the post below to add the image
-
-        // POST request to add the image
-
-
-        // axios.post(`${environment.api_url}/experiences/103757536788480/image`,
-        // {
-        //     file: file
-        // })
-        // .then((res) => {console.log(res)})
-        // .catch((e)=>{
-        //     console.log(e)
-        // })
-
+   
         // clear input fields
        resetFields();
     };
-
-    
-
-
-    // const handleAdd = () => {
-    //     setShow(false);
-    //     // pass the lat and lon once parameters are made in the back end
-    //     geoLocation(city, state, country, setLat, setLon);
-
-    //     axios.post(`${environment.api_url}/trips`,
-    //     {
-    //         trip_name: name,
-    //         description: description
-
-    //     })
-    //     .then((res) => {console.log(res)})
-    //     .catch((e)=>console.log(e))
-
-    //     // clear input fields
-    //    resetFields();
-    // };
 
 
     // Functions for Rating functionality 
@@ -162,6 +141,8 @@ function SearchBar() {
     const imageHandler = (e) => {
         let selected = e.target.files[0];
 
+        console.log(selected)
+
         const types = ['image/png', 'image/jpeg'];
         
         if(selected && types.includes(selected.type)) {
@@ -171,6 +152,30 @@ function SearchBar() {
             setFile(null);
             setError('Please select an image file (png or jpeg)');
         }
+    }
+
+    const image_headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+
+    const handleImageRequest = (exp_id) => {
+        const formData = new FormData()
+        formData.append('file',file)
+
+        // POST request to add the image
+        axios.post(`${environment.api_url}/experiences/${exp_id}/image`,
+        
+           formData
+        ,
+        {
+            headers:  image_headers
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>{
+            console.log("error uploading image for new experience:" + e )
+        })
+
     }
 
  

@@ -61,10 +61,10 @@ function LeftContainer({view}) {
 
             const localStorageToken = localStorage.getItem('access_token')
 
-            if(localStorageToken === null) {
+            // if(localStorageToken === null) {
+            //     localStorage.setItem('access_token', userToken);
+            // }
                 localStorage.setItem('access_token', userToken);
-
-            }
 
         }     
      
@@ -82,7 +82,9 @@ function LeftContainer({view}) {
                             name={experience.experience_name} 
                             city={experience.city} 
                             country={experience.country} 
-                            rating={experience.rating} />)
+                            rating={experience.rating}
+                            img_url={experience.image_url}
+                            />)
                         })}
                 </ListGroup>
         );

@@ -68,9 +68,7 @@ function DashboardExperienceDetails({id,name,description,address,city,country,la
         axios
         .get(`${environment.api_url}/experiences`,
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
+            headers: headers
         })
         .then((res) => {updateExperiences(res.data.experiences);},[])
         .catch(e => console.log(e))

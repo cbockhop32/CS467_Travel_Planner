@@ -33,7 +33,21 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentExperiences.map((experience,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  
+                                id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} 
+                                name={experience.experience_name} location={"Somewhere"} 
+                                description={experience.description}
+                                city = {experience.city}
+                                address={experience.address}
+                                country = {experience.country}
+                                latitude={experience.latitude}
+                                longitude={experience.longitude}
+                                rating = {experience.rating}
+                                img_url={experience.image_url}
+
+                         
+                                />
+                            </Tab.Pane>
                     )
                 })}
             </Tab.Content>
@@ -55,6 +69,7 @@ function RightContainer({view, dashboardView}) {
                         longitude={experience.longitude}
                         activity_type={experience.activity_type}
                         rating={experience.rating}
+                        img_url={experience.image_url}
                         />
                     </Tab.Pane>
                     )
