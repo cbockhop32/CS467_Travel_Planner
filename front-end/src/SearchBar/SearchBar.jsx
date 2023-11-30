@@ -1,8 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {useLocation} from 'react-router-dom'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
 import useInputState from '../hooks/useInputState';
+import { Rating } from 'react-simple-star-rating'
+import { ExperiencesContext } from '../Context/ExperiencesContext';
 import { environment } from '../Environments/EnvDev';
 import axios from 'axios';
 
@@ -11,72 +13,172 @@ function SearchBar() {
     
     // use hook to handle state of city/state/country 
     // and lat and lon
+    const [searchKeywords, updateSearchKeywords, resetSearchKeywords] = useInputState('');
     const [name, updateName, resetName] = useInputState('');
-    const [location, updateLocation, resetLocation] = useInputState('');
+    const [address, updateAddress, resetAddress] = useInputState('');
     const [description, updateDescription, resetDescription] = useInputState('');
     const [city, updateCity, resetCity] = useInputState('');
     const [state, updateState, resetState] = useInputState('');
     const [country, updateCountry, resetCountry] = useInputState('');
     const [category, updateCategory] = useInputState('');
-    const [lattitude, setLat] = useState('');
-    const [longitude, setLon] = useState('');
+    const [rating, setRating] = useState(0)
+    const [latitude, setLat] = useState(0);
+    const [longitude, setLon] = useState(0);
+    const [file, setFile] = useState(null); // for image input
+    const [error, setError] = useState(null) // for image input
+    const [newExpID, setNewExpID] = useInputState('');
+
+    // Context for updating experiences
+    const {currentExperiences,updateExperiences} = useContext(ExperiencesContext);
+
 
     let currRoute = useLocation();
 
-
     const resetFields = () => {
         resetName();
-        resetLocation();
+        resetAddress();
         resetDescription();
         resetCity();
         resetState();
         resetCountry();
-
+        handleRatingReset();
+        setLat(0);
+        setLon(0);
     }
+
+
+
+    const handleSearch = (keywords) => {
+        axios.get(`${environment.api_url}/experiences/search?keyword=${keywords}`)
+        .then((res) => {
+            updateExperiences(res.data);
+        })
+        .catch((e)=>console.log(e))
+        
+        // If the passed in keywords was empty, then the clear button was clicked
+        if(keywords === '') {
+            resetSearchKeywords();
+        }
+    }
+
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+    // console.log(headers)
     
-    const handleAdd = () => {
+    async function handleAdd(){
         setShow(false);
         // pass the lat and lon once parameters are made in the back end
-        geoLocation(city, state, country, setLat, setLon);
+        // if(city !== "" || state !== "" || country !== "") {
+        //      await geoLocation(city, state, country, setLat, setLon);
+        // }
+        
 
+        // POST request to add the experience
         axios.post(`${environment.api_url}/experiences`,
+        {   
+                experience_name: name,
+                description: description,
+                address: address,
+                city: city,
+                country: country,
+                latitude: latitude,
+                longitude: longitude,
+                activity_type: category,
+                rating: rating,
+                public: true
+        },
         {
-            experience_name: name,
-            description: description
-
+            headers: headers
         })
-        .then((res) => {console.log(res)})
-        .catch((e)=>console.log(e))
+        .then((res) => {
+            
+            console.log(res.data.id)
+            handleImageRequest(res.data.id)
 
+            // Need to update experience list
+        
+        })
+        .catch((e)=>{
+            if(e.response.status === 401) {
+                alert("Please login or create an account inorder to add an Experience")
+            }
+            console.log(e)
+        })
+
+        // the response from the first post to add the experience returns the Experience ID, use that for
+        // the post below to add the image
+   
         // clear input fields
        resetFields();
     };
 
 
-    // const handleAdd = () => {
-    //     setShow(false);
-    //     // pass the lat and lon once parameters are made in the back end
-    //     geoLocation(city, state, country, setLat, setLon);
+    // Functions for Rating functionality 
 
-    //     axios.post(`${environment.api_url}/trips`,
-    //     {
-    //         trip_name: name,
-    //         description: description
+    const handleRating = (rate) => {
+        setRating(rate)
+    
+        // other logic
+      }
 
-    //     })
-    //     .then((res) => {console.log(res)})
-    //     .catch((e)=>console.log(e))
-
-    //     // clear input fields
-    //    resetFields();
-    // };
+    const handleRatingReset = () => {
+        // Set the initial value
+        setRating(0)
+      }
 
     const handleShow = () => setShow(true);
+
     const handleClose = () => {
         setShow(false);
         // clear input fields
         resetFields();
     }  
+
+
+    const imageHandler = (e) => {
+        let selected = e.target.files[0];
+
+        console.log(selected)
+
+        const types = ['image/png', 'image/jpeg'];
+        
+        if(selected && types.includes(selected.type)) {
+            setFile(selected);
+            setError('');
+        } else {
+            setFile(null);
+            setError('Please select an image file (png or jpeg)');
+        }
+    }
+
+    const image_headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+
+    const handleImageRequest = (exp_id) => {
+        const formData = new FormData()
+        formData.append('file',file)
+
+        // POST request to add the image
+        axios.post(`${environment.api_url}/experiences/${exp_id}/image`,
+        
+           formData
+        ,
+        {
+            headers:  image_headers
+        })
+        .then((res) => {console.log(res)})
+        .catch((e)=>{
+            console.log("error uploading image for new experience:" + e )
+        })
+
+    }
+
+ 
  
     // Can un-comment this to see React state change in console
     // useEffect(() => 
@@ -92,8 +194,14 @@ function SearchBar() {
 
             <Row className="justify-content-md-center mb-3" style={{height:"10%", maxHeight:"50px"}}>
                 <Stack className='m-2' direction="horizontal" gap={3} style={{width:"50%"}}>
-                    <Form.Control className="me-auto" placeholder='Enter Experience Name, Keywords, Location, etc.' />
-                    <Button variant="primary" >Search</Button>
+                    <Form.Control 
+                        className="me-auto" 
+                        placeholder='Enter Experience Name, Keywords, Location, etc.'
+                        value={searchKeywords}
+                        onChange={updateSearchKeywords}
+                        />
+                    <Button variant="primary" onClick={() => handleSearch(searchKeywords)} >Search</Button>
+                    <Button variant="primary" onClick={() => handleSearch('')} >Clear</Button>
                     <div className="vr" />
                     <Button variant="primary"  onClick={handleShow}>Add</Button>
                     <Modal show={show} onHide={handleClose}>
@@ -126,10 +234,10 @@ function SearchBar() {
                                     </Form.Group>   
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
-                                    <Form.Label>Location</Form.Label>
+                                    <Form.Label>Address</Form.Label>
                                     <Form.Control 
-                                       value={location}
-                                       onChange={updateLocation}
+                                       value={address}
+                                       onChange={updateAddress}
                                     />
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
@@ -151,6 +259,15 @@ function SearchBar() {
                                     onChange={updateCountry} />
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
+                                    <Form.Label>Rating</Form.Label>
+                                    <Rating
+                                        onClick={handleRating}
+                                        allowFraction={true}
+                                        style={{marginLeft: "10px"}}
+                                    />
+                     
+                                </Form.Group>
+                                <Form.Group className='mb-3'>
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control as="textarea" rows={3} 
                                            value={description}
@@ -159,7 +276,8 @@ function SearchBar() {
                                 </Form.Group>
                                 <Form.Group controlId="formFileSm" className="mb-3">
                                     <Form.Label>Add Images</Form.Label>
-                                    <Form.Control type="file" size="sm" />
+                                    <Form.Control type="file" onChange={imageHandler} size="sm" />
+              
                                 </Form.Group>
                             </Form>
                         </Modal.Body>

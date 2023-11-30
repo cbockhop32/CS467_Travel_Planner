@@ -11,6 +11,12 @@ export default(state, action) => {
                     ...state,
                     trips: action.payload
                 }
+
+        case 'UPDATE_TOKEN':
+            return {
+                ...state,
+                token: action.payload
+            }
     
         default: 
             return state;

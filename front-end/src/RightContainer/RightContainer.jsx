@@ -13,13 +13,16 @@ function RightContainer({view, dashboardView}) {
     const {currentTrips} = useContext(ExperiencesContext);
 
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+
     useEffect(() => {
         axios
         .get(`${environment.api_url}/trips`,
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
+            headers: headers
         })
         .then((res) => {updateTrips(res.data.trips);},[])
         .catch(e => console.log(e))
@@ -30,7 +33,21 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentExperiences.map((experience,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  
+                                id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} 
+                                name={experience.experience_name} location={"Somewhere"} 
+                                description={experience.description}
+                                city = {experience.city}
+                                address={experience.address}
+                                country = {experience.country}
+                                latitude={experience.latitude}
+                                longitude={experience.longitude}
+                                rating = {experience.rating}
+                                img_url={experience.image_url}
+
+                         
+                                />
+                            </Tab.Pane>
                     )
                 })}
             </Tab.Content>
@@ -41,7 +58,20 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentExperiences.map((experience,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardExperienceDetails  id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} name={experience.experience_name} location={"Somewhere"} description={experience.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardExperienceDetails  
+                        id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} 
+                        name={experience.experience_name}
+                        description={experience.description}
+                        address={experience.address} 
+                        city={experience.city}
+                        country={experience.country}
+                        latitude={experience.latitude}
+                        longitude={experience.longitude}
+                        activity_type={experience.activity_type}
+                        rating={experience.rating}
+                        img_url={experience.image_url}
+                        />
+                    </Tab.Pane>
                     )
                 })}
             </Tab.Content>
@@ -52,7 +82,7 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentTrips.map((trip,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} name={trip.trip_name} location={"Somewhere"} description={trip.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} name={trip.trip_name}  description={trip.description} experiences={trip.experiences}/></Tab.Pane>
                     )
                 })}
             </Tab.Content>

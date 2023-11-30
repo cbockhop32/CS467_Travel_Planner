@@ -4,7 +4,8 @@ import reducer from './experiencesReducer'
 
 const initialState = {
     experiences : [],
-    trips: []
+    trips: [],
+    token: ''
 }
 
 export const ExperiencesContext = createContext(initialState);
@@ -27,13 +28,22 @@ export const ExperiencesProvider = ({children}) => {
         })
     }
 
+    function updateToken(token){
+        dispatch({
+            type:'UPDATE_TOKEN',
+            payload: token
+        })
+    }
+
     return (
         <ExperiencesContext.Provider
             value={{
                 currentExperiences: state.experiences,
                 currentTrips: state.trips,
+                token: state.token,
                 updateExperiences, 
-                updateTrips
+                updateTrips,
+                updateToken
             }}
         >
 
