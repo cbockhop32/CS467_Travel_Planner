@@ -67,7 +67,7 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentTrips.map((trip,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} name={trip.trip_name}  description={trip.description}/></Tab.Pane>
+                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardTripDetails  id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} name={trip.trip_name}  description={trip.description} experiences={trip.experiences}/></Tab.Pane>
                     )
                 })}
             </Tab.Content>

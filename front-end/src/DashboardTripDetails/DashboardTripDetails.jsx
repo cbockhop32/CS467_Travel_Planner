@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react'
 import { Container,Row, Col, Button,Form, Accordion, Modal } from 'react-bootstrap';
 import { ExperiencesContext } from '../Context/ExperiencesContext';
+import DashboardExperienceAccordion from '../DashboardExperienceAccordion/DashboardExperienceAccordion';
 import { environment } from '../Environments/EnvDev';
 import useInputState from '../hooks/useInputState';
 
@@ -10,12 +11,14 @@ import axios from 'axios';
 
 
 
-function DashboardTripDetails({id,name,description}) {
+function DashboardTripDetails({id,name,description,experiences}) {
     const [editing,setEditing] = useState(false);
     const [tripName,updateTripName] = useInputState(name)
     const [tripDescription,updateTripDescription] = useInputState(description)
     const [show, setShow] = useState(false); // for the delete confirmation modal
-    const {updateTrips} = useContext(ExperiencesContext);
+    const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
+
+    console.log(experiences)
 
     const headers = {
         'Content-Type': 'application/json',
@@ -132,87 +135,12 @@ function DashboardTripDetails({id,name,description}) {
                 Experiences Added to Trip
                 </Col>
                 <Accordion>
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>Experience #1</Accordion.Header>
-                        <Accordion.Body>
-                            <Row className='mb-2'>
-                                <Col>
-                                Experience Name
-                                </Col>
-                                <Col>
-                                Experience Location
-                                </Col>
-                               
-                            </Row>
-                            <Row >
-                                <Col>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
-                                
-                                </Col>
-                        
-
-                            </Row>
-                  
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>Experience #2</Accordion.Header>
-                        <Accordion.Body>
-                        <Row className='mb-2'>
-                                <Col>
-                                Experience Name
-                                </Col>
-                                <Col>
-                                Experience Location
-                                </Col>
-                               
-                            </Row>
-                            <Row >
-                                <Col>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
-                                
-                                </Col>
-                            </Row>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                    <Accordion.Item eventKey="2">
-                        <Accordion.Header>Experience #3</Accordion.Header>
-                        <Accordion.Body>
-                        <Row className='mb-2'>
-                                <Col>
-                                Experience Name
-                                </Col>
-                                <Col>
-                                Experience Location
-                                </Col>
-                               
-                            </Row>
-                            <Row >
-                                <Col>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
-                                
-                                </Col>
-                            </Row>
-                        </Accordion.Body>
-                    </Accordion.Item>
+                    {currentExperiences
+                        .filter((exp) => experiences.includes(exp.self.substring(exp.self.lastIndexOf('/')+1) ) )
+                        .map((filteredExp,index) => {
+                            return(<DashboardExperienceAccordion eventKey={index} name ={filteredExp.experience_name} location={filteredExp.city + ", " + filteredExp.country } description={filteredExp.description} />)
+                        })
+                    }
                 </Accordion>
             </Row>
    
