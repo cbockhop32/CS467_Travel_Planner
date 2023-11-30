@@ -313,7 +313,13 @@ def trip_post():
 
         query = client.query(kind=TRIPS)
 
-        trips = list(query.fetch())
+        if owner_id:
+            query.add_filter('owner', '=', owner_id)
+            trips = list(query.fetch())
+        else:
+            trips = []
+
+        # trips = list(query.fetch())
         response = {
             'trips': trips
         }
