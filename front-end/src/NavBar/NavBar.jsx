@@ -11,7 +11,11 @@ function NavBar() {
     const handleShow = () => setShow(true);
 
 
+    const accessToken = localStorage.getItem('access_token')
 
+    const handleLogout = () => {
+        localStorage.removeItem('access_token')
+    }
   
     return (
         <Row 
@@ -32,7 +36,11 @@ function NavBar() {
             <Col className='text-center'>
                  <Link className="m-2 link-dark" style={{cursor:"pointer"}} to="/">Home</Link>
                 <Link className="m-2 link-dark" style={{cursor:"pointer"}} to="/dashboard">My Dashboard</Link>
-                <a   href={environment.api_url + '/login'} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a>
+
+                {accessToken == null ? <a   href={environment.api_url + '/login'} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a> : <></>}
+                
+
+                {accessToken === null ? <></> :<a onClick={handleLogout}  href={environment.api_url + '/logout'} style={{cursor:"pointer"}} className='link-dark m-2'>Logout</a> }
                 {/* <a   onClick={handleShow} style={{cursor:"pointer"}} className='link-dark m-2'>Login/Register</a> */}
                 {/* <UserLogin handleClose={handleClose} show={show} /> */}
 

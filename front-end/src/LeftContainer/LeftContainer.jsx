@@ -9,11 +9,32 @@ import axios from "axios";
 
 function LeftContainer({view}) {
 
-    const {token,currentTrips,currentExperiences, updateExperiences,updateToken} = useContext(ExperiencesContext);
+    const {token,currentTrips,currentExperiences, updateExperiences,updateToken, updateTrips} = useContext(ExperiencesContext);
 
+    // const headers = {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    // }
 
+    
+
+    // const updateTripsList = () => {
+    //     axios
+    //     .get(`${environment.api_url}/trips`,
+    //     {
+    //         headers: headers
+    //     })
+    //     .then((res) => {updateTrips(res.data.trips);},[])
+    //     .catch(e => console.log(e))
+    // }
+   
 
     useEffect(() => {
+
+        // updateTripsList();
+
+
+
         axios
         .get(`${environment.api_url}/experiences`,
         {
@@ -32,6 +53,7 @@ function LeftContainer({view}) {
         const currPath = window.location.pathname
         const tokenUrl = window.location.href.indexOf('token') // checking if there is token within the url path
 
+        // Setting token within local storage
         if(currPath === '/dashboard' && tokenUrl > -1){
             const currUrl = window.location.href
             const userToken = currUrl.substring(currUrl.lastIndexOf('=')+1)
@@ -44,8 +66,8 @@ function LeftContainer({view}) {
 
             }
 
-
         }     
+     
     },[]);
 
 

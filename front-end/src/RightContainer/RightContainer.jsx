@@ -13,13 +13,16 @@ function RightContainer({view, dashboardView}) {
     const {currentTrips} = useContext(ExperiencesContext);
 
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
+
     useEffect(() => {
         axios
         .get(`${environment.api_url}/trips`,
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
+            headers: headers
         })
         .then((res) => {updateTrips(res.data.trips);},[])
         .catch(e => console.log(e))

@@ -1,10 +1,12 @@
-import React from 'react'
+import React,{useContext,useEffect} from 'react'
 import {Row, Col, Tab} from 'react-bootstrap';
 import LeftContainer from '../LeftContainer/LeftContainer';
 import RightContainer from '../RightContainer/RightContainer';
+import { ExperiencesContext } from '../Context/ExperiencesContext';
+import axios from 'axios';
+import { environment } from '../Environments/EnvDev';
 
-
-function MainContainer() {
+function MainContainer() {    
     return ( 
             <Row className='justify-content-md-center overflow-hidden' style={{height:"85%"}}   >
                 <Tab.Container   style={{ width:"100%"}} >

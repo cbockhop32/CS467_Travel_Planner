@@ -1,8 +1,8 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import {Row, Col, Container, Button, Modal, Form} from 'react-bootstrap';
 import LeftContainer from '../LeftContainer/LeftContainer';
 import RightContainer from '../RightContainer/RightContainer';
-import { ExperiencesProvider } from '../Context/ExperiencesContext';
+import { ExperiencesProvider, ExperiencesContext } from '../Context/ExperiencesContext';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import useInputState from '../hooks/useInputState';
@@ -16,6 +16,8 @@ function DashboardPage() {
     const [show, setShow] = useState(false);
     const [name, updateName, resetName] = useInputState('');
     const [description, updateDescription, resetDescription] = useInputState('');
+    const {updateTrips} = useContext(ExperiencesContext);
+
 
     const headers = {
         'Content-Type': 'application/json',
@@ -30,17 +32,31 @@ function DashboardPage() {
         // resetFields();
     }  
 
+    const updateTripsList = () => {
+        axios
+        .get(`${environment.api_url}/trips`,
+        {
+            headers: headers
+        })
+        .then((res) => {updateTrips(res.data.trips);},[])
+        .catch(e => console.log(e))
+    }
+
     
     const handleAddTrip = () => {
         axios.post(`${environment.api_url}/trips`,
         {   
                 trip_name: name,
                 description: description,
+                public: true
         },
         {
             headers: headers
         })
-        .then((res) => {console.log(res)})
+        .then((res) => {
+            console.log(res)
+            updateTripsList()
+        })
         .catch((e)=>{
             if(e.response.status === 401) {
                 alert("Please login or create an account inorder to add a Trip")
@@ -49,8 +65,6 @@ function DashboardPage() {
         })
 
         handleClose();
-
-
     }
 
 

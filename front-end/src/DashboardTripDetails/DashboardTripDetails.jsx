@@ -34,9 +34,7 @@ function DashboardTripDetails({id,name,description}) {
         axios
         .get(`${environment.api_url}/trips`,
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
+            headers: headers
         })
         .then((res) => {updateTrips(res.data.trips);},[])
         .catch(e => console.log(e))
