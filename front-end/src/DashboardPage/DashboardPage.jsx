@@ -127,7 +127,7 @@ function DashboardPage() {
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={() => handleAddTrip} >
+                            <Button variant="primary" onClick={() => handleAddTrip()} >
                                 Add
                             </Button>
                             </Modal.Footer>

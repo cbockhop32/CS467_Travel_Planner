@@ -31,6 +31,10 @@ function SearchBar() {
     // Context for updating experiences
     const {updateExperiences} = useContext(ExperiencesContext);
 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    }
 
     let currRoute = useLocation();
 
@@ -49,9 +53,7 @@ function SearchBar() {
         axios
         .get(`${environment.api_url}/experiences`,
         {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
+            headers: headers
         })
         .then((res) => {updateExperiences(res.data.experiences);},[])
         .catch(e => {
@@ -76,10 +78,7 @@ function SearchBar() {
         }
     }
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-    }
+
     // console.log(headers)
 
     const handleAdd = async () => {
