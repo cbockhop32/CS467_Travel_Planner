@@ -54,7 +54,7 @@ function ExperienceDetails({id, name, location,description, address, city,countr
                         {name}
                     </Row>
                     <Row style={{fontSize:"16px"}}>
-                        {location}
+                        {city + ", " + country}
                     </Row>    
                 </Col>
                 <Col className='mt-2 text-end'   lg={6}>

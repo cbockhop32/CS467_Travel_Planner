@@ -82,7 +82,7 @@ function DashboardPage() {
                     <Tab eventKey="experiences" title="Experiences"  >
                     <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
                         <Tab.Container  style={{ width:"100%"}}  >
-                            <ExperiencesProvider>
+                            {/* <ExperiencesProvider> */}
                                 <Row  className='justify-content-md-center h-100 ' style={{maxWidth:"1600px"}}  >
                                     <Col lg={4} className='h-100 '>
                                         <LeftContainer view={"experiences"}/>
@@ -91,7 +91,7 @@ function DashboardPage() {
                                         <RightContainer view={"experiences"} dashboardView={true} />
                                     </Col>
                                 </Row>
-                            </ExperiencesProvider>
+                            {/* </ExperiencesProvider> */}
                         </Tab.Container>
                         </Row> 
                     </Tab>
@@ -138,7 +138,7 @@ function DashboardPage() {
                         </Modal>
                         
                         <Tab.Container   style={{ width:"100%"}} >
-                            <ExperiencesProvider>
+                            {/* <ExperiencesProvider> */}
                                 <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
                                     <Col lg={4} className='h-100'>
                                         <LeftContainer view={"trips"} />
@@ -147,7 +147,7 @@ function DashboardPage() {
                                         <RightContainer view={"trips"} dashboardView={true} />
                                     </Col>
                                 </Row>
-                            </ExperiencesProvider>
+                            {/* </ExperiencesProvider> */}
                         </Tab.Container>
                     </Row> 
                     </Tab>

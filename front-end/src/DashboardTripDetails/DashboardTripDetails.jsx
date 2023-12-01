@@ -18,7 +18,6 @@ function DashboardTripDetails({id,name,description,experiences}) {
     const [show, setShow] = useState(false); // for the delete confirmation modal
     const {currentExperiences,updateTrips} = useContext(ExperiencesContext);
 
-    // console.log(experiences)
 
     const headers = {
         'Content-Type': 'application/json',
@@ -54,7 +53,6 @@ function DashboardTripDetails({id,name,description,experiences}) {
             updateTripsList();
         })
         .catch((e)=>console.log(e))
-
 
         handleClose();
     };

@@ -35,7 +35,7 @@ function RightContainer({view, dashboardView}) {
                 {currentExperiences.map((experience,index) => {
                     return (<Tab.Pane key={index} eventKey={`#link${index}`}><ExperienceDetails  
                                 id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} 
-                                name={experience.experience_name} location={"Somewhere"} 
+                                name={experience.experience_name} 
                                 description={experience.description}
                                 city = {experience.city}
                                 address={experience.address}

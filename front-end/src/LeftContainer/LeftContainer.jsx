@@ -30,11 +30,6 @@ function LeftContainer({view}) {
    
 
     useEffect(() => {
-
-        // updateTripsList();
-
-
-
         axios
         .get(`${environment.api_url}/experiences`,
         {
