@@ -26,7 +26,7 @@ function SearchBar() {
     // const [latitude, setLatitude] = useState(0);
     // const [longitude, setLongitude] = useState(0);
     const [file, setFile] = useState(null); // for image input
-    const [ setError] = useState(null) // for image input
+    const [ error,setError] = useState(null) // for image input
 
     // Context for updating experiences
     const {updateExperiences} = useContext(ExperiencesContext);
