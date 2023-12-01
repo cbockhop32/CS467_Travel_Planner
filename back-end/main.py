@@ -615,7 +615,7 @@ def callback():
     if 'id_token' not in token:
         return "ID Token not found in response", 401
 
-    react_dashboard_url = f"http://localhost:3000/dashboard?token={token['id_token']}"
+    react_dashboard_url = f"https://cs-467-travel-planner.vercel.app/dashboard?token={token['id_token']}"
     return redirect(react_dashboard_url)
 
 
@@ -647,7 +647,7 @@ def logout():
         + "/v2/logout?"
         + urlencode(
             {
-                "returnTo": url_for("index", _external=True),
+                "returnTo": "https://cs-467-travel-planner.vercel.app/",
                 "client_id": CLIENT_ID,
             },
             quote_via=quote_plus,
