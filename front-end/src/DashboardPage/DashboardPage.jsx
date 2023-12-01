@@ -58,9 +58,7 @@ function DashboardPage() {
             updateTripsList()
         })
         .catch((e)=>{
-            if(e.response.status === 401) {
-                alert("Please login or create an account inorder to add a Trip")
-            }
+         
             console.log(e)
         })
 
@@ -129,7 +127,7 @@ function DashboardPage() {
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="primary" onClick={handleAddTrip} >
+                            <Button variant="primary" onClick={() => handleAddTrip} >
                                 Add
                             </Button>
                             </Modal.Footer>

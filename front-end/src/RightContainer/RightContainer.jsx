@@ -44,8 +44,6 @@ function RightContainer({view, dashboardView}) {
                                 longitude={experience.longitude}
                                 rating = {experience.rating}
                                 img_url={experience.image_url}
-
-                         
                                 />
                             </Tab.Pane>
                     )
