@@ -69,7 +69,7 @@ function DashboardTripDetails({id,name,description,experiences}) {
         })
         .then((res) => {
             console.log(res);
-            // updateTripsList();
+            updateTripsList();
         })
         .catch((e) => console.log(e))
 
@@ -139,6 +139,9 @@ function DashboardTripDetails({id,name,description,experiences}) {
                             return(<DashboardExperienceAccordion eventKey={index} name ={filteredExp.experience_name} location={filteredExp.city + ", " + filteredExp.country } description={filteredExp.description} />)
                         })
                     }
+
+
+                
                 </Accordion>
             </Row>
    
