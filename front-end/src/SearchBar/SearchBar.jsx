@@ -82,7 +82,7 @@ function SearchBar() {
     }
     // console.log(headers)
 
-    async function handleAdd(){
+    const handleAdd = async () => {
         setShow(false);
 
         let cityname =  city
@@ -307,7 +307,7 @@ function SearchBar() {
                         <Button variant="secondary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="primary" onClick={handleAdd}>
+                        <Button variant="primary" onClick={async ()=> {await handleAdd();}}>
                             Add
                         </Button>
                         </Modal.Footer>
