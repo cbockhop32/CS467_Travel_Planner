@@ -1,8 +1,8 @@
 import React,{useState,useContext} from 'react'
-import {Row, Col, Container, Button, Modal, Form} from 'react-bootstrap';
+import {Row, Col, Button, Modal, Form} from 'react-bootstrap';
 import LeftContainer from '../LeftContainer/LeftContainer';
 import RightContainer from '../RightContainer/RightContainer';
-import { ExperiencesProvider, ExperiencesContext } from '../Context/ExperiencesContext';
+import { ExperiencesContext } from '../Context/ExperiencesContext';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import useInputState from '../hooks/useInputState';
@@ -29,7 +29,8 @@ function DashboardPage() {
     const handleClose = () => {
         setShow(false);
         // clear input fields
-        // resetFields();
+        resetDescription();
+        resetName();
     }  
 
     const updateTripsList = () => {
@@ -47,8 +48,7 @@ function DashboardPage() {
         axios.post(`${environment.api_url}/trips`,
         {   
                 trip_name: name,
-                description: description,
-                public: true
+                description: description
         },
         {
             headers: headers
@@ -82,7 +82,6 @@ function DashboardPage() {
                     <Tab eventKey="experiences" title="Experiences"  >
                     <Row className='justify-content-md-center overflow-hidden' style={{height:"85vh"}}>
                         <Tab.Container  style={{ width:"100%"}}  >
-                            <ExperiencesProvider>
                                 <Row  className='justify-content-md-center h-100 ' style={{maxWidth:"1600px"}}  >
                                     <Col lg={4} className='h-100 '>
                                         <LeftContainer view={"experiences"}/>
@@ -91,7 +90,6 @@ function DashboardPage() {
                                         <RightContainer view={"experiences"} dashboardView={true} />
                                     </Col>
                                 </Row>
-                            </ExperiencesProvider>
                         </Tab.Container>
                         </Row> 
                     </Tab>
@@ -138,7 +136,6 @@ function DashboardPage() {
                         </Modal>
                         
                         <Tab.Container   style={{ width:"100%"}} >
-                            <ExperiencesProvider>
                                 <Row  className='justify-content-md-center h-100' style={{maxWidth:"1600px"}}  >
                                     <Col lg={4} className='h-100'>
                                         <LeftContainer view={"trips"} />
@@ -147,7 +144,6 @@ function DashboardPage() {
                                         <RightContainer view={"trips"} dashboardView={true} />
                                     </Col>
                                 </Row>
-                            </ExperiencesProvider>
                         </Tab.Container>
                     </Row> 
                     </Tab>

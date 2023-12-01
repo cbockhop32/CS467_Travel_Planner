@@ -1,11 +1,12 @@
 import React, {useState, useContext} from 'react'
 import {useLocation} from 'react-router-dom'
 import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
-import geoLocation from '../Geolocation/geolocationAPI';
 import useInputState from '../hooks/useInputState';
 import { Rating } from 'react-simple-star-rating'
 import { ExperiencesContext } from '../Context/ExperiencesContext';
 import { environment } from '../Environments/EnvDev';
+import usaStates from '../Geolocation/usaStates';
+import countryNames from '../Geolocation/countryCodes'
 import axios from 'axios';
 
 function SearchBar() {
@@ -22,14 +23,13 @@ function SearchBar() {
     const [country, updateCountry, resetCountry] = useInputState('');
     const [category, updateCategory] = useInputState('');
     const [rating, setRating] = useState(0)
-    const [latitude, setLat] = useState(0);
-    const [longitude, setLon] = useState(0);
+    // const [latitude, setLatitude] = useState(0);
+    // const [longitude, setLongitude] = useState(0);
     const [file, setFile] = useState(null); // for image input
-    const [error, setError] = useState(null) // for image input
-    const [newExpID, setNewExpID] = useInputState('');
+    const [ error,setError] = useState(null) // for image input
 
     // Context for updating experiences
-    const {currentExperiences,updateExperiences} = useContext(ExperiencesContext);
+    const {updateExperiences} = useContext(ExperiencesContext);
 
 
     let currRoute = useLocation();
@@ -42,8 +42,23 @@ function SearchBar() {
         resetState();
         resetCountry();
         handleRatingReset();
-        setLat(0);
-        setLon(0);
+    }
+
+
+    const updateExperienceList = () => {
+        axios
+        .get(`${environment.api_url}/experiences`,
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((res) => {updateExperiences(res.data.experiences);},[])
+        .catch(e => {
+            if(e.response.status === 401) {
+                console.log("Login to be able to add Experience")
+            }
+            console.log(e)})
     }
 
 
@@ -61,31 +76,40 @@ function SearchBar() {
         }
     }
 
-
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
     }
     // console.log(headers)
-    
+
     async function handleAdd(){
         setShow(false);
+
+        let cityname =  city
+        let statecode = state
+    
+        //set statecode as country if no state given 
+        if (state === ''){ statecode = country}
+        //checks if state was entered as an 2 letter state code 
+        if (state in usaStates){statecode = usaStates[state]}
+    
+        //checks if country was entered as an 2 letter state code 
+        if (country in usaStates){statecode = countryNames[country]}
         // pass the lat and lon once parameters are made in the back end
-        // if(city !== "" || state !== "" || country !== "") {
-        //      await geoLocation(city, state, country, setLat, setLon);
-        // }
-        
+        const result = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`);
+        const gps_coords = result.data
+
 
         // POST request to add the experience
-        axios.post(`${environment.api_url}/experiences`,
+        await axios.post(`${environment.api_url}/experiences`,
         {   
                 experience_name: name,
                 description: description,
                 address: address,
                 city: city,
                 country: country,
-                latitude: latitude,
-                longitude: longitude,
+                latitude: gps_coords[0].lat,
+                longitude: gps_coords[0].lon,
                 activity_type: category,
                 rating: rating,
                 public: true
@@ -94,12 +118,13 @@ function SearchBar() {
             headers: headers
         })
         .then((res) => {
-            
+
+            // POSTING IMAGE ONCE EXPERIENCE IS ADDED
             console.log(res.data.id)
             handleImageRequest(res.data.id)
 
             // Need to update experience list
-        
+            updateExperienceList();
         })
         .catch((e)=>{
             if(e.response.status === 401) {
@@ -108,8 +133,6 @@ function SearchBar() {
             console.log(e)
         })
 
-        // the response from the first post to add the experience returns the Experience ID, use that for
-        // the post below to add the image
    
         // clear input fields
        resetFields();
@@ -189,7 +212,7 @@ function SearchBar() {
     // console.log("lattitude:", lattitude),
     // console.log("longitude:", longitude),
     // [city, state, country, lattitude, longitude]);
-    if(currRoute.pathname == "/") {
+    if(currRoute.pathname === "/") {
         return ( 
 
             <Row className="justify-content-md-center mb-3" style={{height:"10%", maxHeight:"50px"}}>

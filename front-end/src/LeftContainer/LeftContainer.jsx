@@ -1,4 +1,4 @@
-import React,{useEffect,useContext, useState} from 'react'
+import React,{useEffect,useContext} from 'react'
 import { ListGroup } from 'react-bootstrap';
 import ExperienceTab from '../ExperienceTab/ExperienceTab';
 import TripTab from '../TripTab/TripTab';
@@ -9,7 +9,7 @@ import axios from "axios";
 
 function LeftContainer({view}) {
 
-    const {token,currentTrips,currentExperiences, updateExperiences,updateToken, updateTrips} = useContext(ExperiencesContext);
+    const {currentTrips,currentExperiences, updateExperiences} = useContext(ExperiencesContext);
 
     // const headers = {
     //     'Content-Type': 'application/json',
@@ -30,11 +30,6 @@ function LeftContainer({view}) {
    
 
     useEffect(() => {
-
-        // updateTripsList();
-
-
-
         axios
         .get(`${environment.api_url}/experiences`,
         {
@@ -44,7 +39,7 @@ function LeftContainer({view}) {
         })
         .then((res) => {updateExperiences(res.data.experiences);},[])
         .catch(e => {
-            if(e.response.status == 401) {
+            if(e.response.status === 401) {
                 console.log("Login to be able to add Experience")
             }
             console.log(e)})
@@ -59,7 +54,7 @@ function LeftContainer({view}) {
             const userToken = currUrl.substring(currUrl.lastIndexOf('=')+1)
             // console.log(userToken)
 
-            const localStorageToken = localStorage.getItem('access_token')
+            // const localStorageToken = localStorage.getItem('access_token')
 
             // if(localStorageToken === null) {
             //     localStorage.setItem('access_token', userToken);
@@ -72,7 +67,7 @@ function LeftContainer({view}) {
 
 
 
-    if(view == "experiences") {
+    if(view === "experiences") {
         return (
                 <ListGroup className='m-2 p-2'  style={{ height:"92%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
                     {currentExperiences.map((experience, index) => {
@@ -90,7 +85,7 @@ function LeftContainer({view}) {
         );
 
 
-    } else if(view == "trips") {
+    } else if(view === "trips") {
         return(
         <ListGroup className='m-2 p-2'  style={{ height:"92%", backgroundColor: "#d9d9d9", overflowY:"scroll"}}>
         {currentTrips.map((trip, index) => {
