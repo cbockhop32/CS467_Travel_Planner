@@ -27,7 +27,7 @@ function RightContainer({view, dashboardView}) {
         .then((res) => {updateTrips(res.data.trips);},[])
         .catch(e => console.log(e))
 
-    },[currentTrips]);
+    },[]);
 
     if(view === "experiences" && dashboardView === false) {
         return (  
