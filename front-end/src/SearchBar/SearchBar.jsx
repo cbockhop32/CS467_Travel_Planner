@@ -118,7 +118,6 @@ function SearchBar() {
             headers: headers
         })
         .then((res) => {
-
             // POSTING IMAGE ONCE EXPERIENCE IS ADDED
             console.log(res.data.id)
             handleImageRequest(res.data.id)
