@@ -23,8 +23,8 @@ function SearchBar() {
     const [country, updateCountry, resetCountry] = useInputState('');
     const [category, updateCategory] = useInputState('');
     const [rating, setRating] = useState(0)
-    // const [latitude, setLatitude] = useState(0);
-    // const [longitude, setLongitude] = useState(0);
+    const [latitude, setLatitude] = useInputState(0);
+    const [longitude, setLongitude] = useInputState(0);
     const [file, setFile] = useState(null); // for image input
     const [ error,setError] = useState(null) // for image input
 
@@ -79,24 +79,8 @@ function SearchBar() {
     }
 
 
-    // console.log(headers)
-
     const handleAdd = async () => {
         setShow(false);
-
-        // let cityname =  city
-        // let statecode = state
-    
-        // //set statecode as country if no state given 
-        // if (state === ''){ statecode = country}
-        // //checks if state was entered as an 2 letter state code 
-        // if (state in usaStates){statecode = usaStates[state]}
-    
-        // //checks if country was entered as an 2 letter state code 
-        // if (country in usaStates){statecode = countryNames[country]}
-        // // pass the lat and lon once parameters are made in the back end
-        // const result = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`);
-        // const gps_coords = result.data
 
 
         // POST request to add the experience
@@ -107,8 +91,8 @@ function SearchBar() {
                 address: address,
                 city: city,
                 country: country,
-                latitude: 51.5073219,
-                longitude: -0.1276474,
+                latitude: latitude,
+                longitude: longitude,
                 activity_type: category,
                 rating: rating,
                 public: true
@@ -199,17 +183,6 @@ function SearchBar() {
 
     }
 
- 
- 
-    // Can un-comment this to see React state change in console
-    // useEffect(() => 
-    // console.log("city:", city),
-    // console.log("state:", state),
-    // console.log("country:", country),
-    // console.log("country:", country),
-    // console.log("lattitude:", lattitude),
-    // console.log("longitude:", longitude),
-    // [city, state, country, lattitude, longitude]);
     if(currRoute.pathname === "/") {
         return ( 
 
@@ -278,6 +251,18 @@ function SearchBar() {
                                     <Form.Control  
                                     value={country}
                                     onChange={updateCountry} />
+                                </Form.Group>
+                                <Form.Group className='mb-3'>
+                                    <Form.Label>Latitude</Form.Label>
+                                    <Form.Control  
+                                    value={latitude}
+                                    onChange={setLatitude} />
+                                </Form.Group>
+                                <Form.Group className='mb-3'>
+                                    <Form.Label>Longitude</Form.Label>
+                                    <Form.Control  
+                                    value={longitude}
+                                    onChange={setLongitude} />
                                 </Form.Group>
                                 <Form.Group className='mb-3'>
                                     <Form.Label>Rating</Form.Label>
