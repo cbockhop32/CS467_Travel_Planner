@@ -84,19 +84,19 @@ function SearchBar() {
     const handleAdd = async () => {
         setShow(false);
 
-        let cityname =  city
-        let statecode = state
+        // let cityname =  city
+        // let statecode = state
     
-        //set statecode as country if no state given 
-        if (state === ''){ statecode = country}
-        //checks if state was entered as an 2 letter state code 
-        if (state in usaStates){statecode = usaStates[state]}
+        // //set statecode as country if no state given 
+        // if (state === ''){ statecode = country}
+        // //checks if state was entered as an 2 letter state code 
+        // if (state in usaStates){statecode = usaStates[state]}
     
-        //checks if country was entered as an 2 letter state code 
-        if (country in usaStates){statecode = countryNames[country]}
-        // pass the lat and lon once parameters are made in the back end
-        const result = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`);
-        const gps_coords = result.data
+        // //checks if country was entered as an 2 letter state code 
+        // if (country in usaStates){statecode = countryNames[country]}
+        // // pass the lat and lon once parameters are made in the back end
+        // const result = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${cityname},${statecode}&limit=5&appid=3dd6b4b0643fe807a69521e6f5cd399a`);
+        // const gps_coords = result.data
 
 
         // POST request to add the experience
@@ -107,8 +107,8 @@ function SearchBar() {
                 address: address,
                 city: city,
                 country: country,
-                latitude: gps_coords[0].lat,
-                longitude: gps_coords[0].lon,
+                latitude: 51.5073219,
+                longitude: -0.1276474,
                 activity_type: category,
                 rating: rating,
                 public: true
