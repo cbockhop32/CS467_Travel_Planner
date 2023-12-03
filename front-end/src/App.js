@@ -5,8 +5,8 @@ import NavBar from './NavBar/NavBar';
 import SearchBar from './SearchBar/SearchBar';
 import MainContainer from './MainContainer/MainContainer';
 import DashboardPage from './DashboardPage/DashboardPage';
-import { BrowserRouter as Router, Routes, Route }
-    from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } 
+  from 'react-router-dom';
 
 
 

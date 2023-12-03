@@ -13,7 +13,6 @@ function LeftContainer({view}) {
     const {currentTrips, updateTrips} = useContext(ExperiencesContext);
 
 
-
     useEffect(() => {
             axios
             .get(`${environment.api_url}/experiences`,

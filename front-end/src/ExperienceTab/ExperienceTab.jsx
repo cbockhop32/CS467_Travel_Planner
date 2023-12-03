@@ -1,16 +1,18 @@
 import React from 'react'
 import { ListGroup,Col, Row , Image } from 'react-bootstrap';
 import { Rating } from 'react-simple-star-rating'
+import '../Style/ExperienceTab.css';
+
 
 
 
 
 function ExperienceTab({id,name,location}) {
     return (  
-        <ListGroup.Item style={{height:"75px"}}  variant='primary' className='mt-2 rounded-3'action href={`#link${id}`}>
+        <ListGroup.Item id ="Experience-Item" variant='primary' className='mt-2 rounded-3'action href={`#link${id}`}>
             <Row>
                 <Col  sm={4} lg={4}>
-                    <Image className='rounded-3' style={{height:"60px"}} src='/pics/harbin.jpeg'/>
+                    <Image id="Expereince-Image" className='rounded-3' src='/pics/harbin.jpeg'/>
                 </Col>
                 <Col sm ={6} lg={6}> 
                     <Row>{name}</Row>

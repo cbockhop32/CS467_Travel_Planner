@@ -1,0 +1,16 @@
+#NavRow
+{
+    background-color:#3c6e71; 
+    height:10%; 
+    position: sticky;
+    top: 0
+}
+
+@media (max-width:650px) 
+{
+    #NavRow
+    {
+        height:25%;
+
+    }
+}

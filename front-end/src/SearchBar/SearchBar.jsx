@@ -4,7 +4,10 @@ import {Form, Stack, Button, Row, Modal} from 'react-bootstrap';
 import geoLocation from '../Geolocation/geolocationAPI';
 import useInputState from '../hooks/useInputState';
 import { environment } from '../Environments/EnvDev';
+import '../Style/SearchBar.css';
+
 import axios from 'axios';
+
 
 function SearchBar() {
     const [show, setShow] = useState(false);
@@ -91,7 +94,7 @@ function SearchBar() {
         return ( 
 
             <Row className="justify-content-md-center mb-3" style={{height:"10%", maxHeight:"50px"}}>
-                <Stack className='m-2' direction="horizontal" gap={3} style={{width:"50%"}}>
+                <Stack id="Search-Stack"className='m-2' direction="horizontal" gap={3}>
                     <Form.Control className="me-auto" placeholder='Enter Experience Name, Keywords, Location, etc.' />
                     <Button variant="primary" >Search</Button>
                     <div className="vr" />
