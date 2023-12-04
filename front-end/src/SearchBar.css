@@ -1,0 +1,13 @@
+#Search-Stack
+{
+    width: 50%;
+}
+
+@media (max-width:650px) 
+{
+    #Search-Stack
+    {
+        width:90%;
+
+    }
+}
