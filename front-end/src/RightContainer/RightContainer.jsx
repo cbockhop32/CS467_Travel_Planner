@@ -44,6 +44,7 @@ function RightContainer({view, dashboardView}) {
                                 longitude={experience.longitude}
                                 rating = {experience.rating}
                                 img_url={experience.image_url}
+                                activity_type={experience.activity_type}
                                 />
                             </Tab.Pane>
                     )
@@ -56,7 +57,9 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentExperiences.map((experience,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}><DashboardExperienceDetails  
+                    return (
+                    <Tab.Pane key={index} eventKey={`#link${index}`}>
+                        <DashboardExperienceDetails  
                         id = {experience.self.substring(experience.self.lastIndexOf('/')+1)} 
                         name={experience.experience_name}
                         description={experience.description}
@@ -80,11 +83,13 @@ function RightContainer({view, dashboardView}) {
         return (  
             <Tab.Content className='m-2 p-2 rounded-3'  style={{ backgroundColor:"#d9d9d9", height:"92%",overflowY:"scroll"}}>
                 {currentTrips?.map((trip,index) => {
-                    return (<Tab.Pane key={index} eventKey={`#link${index}`}>
+                    return (
+                    <Tab.Pane key={index} eventKey={`#link${index}`}>
                                 <DashboardTripDetails  
                                     id = {trip.self.substring(trip.self.lastIndexOf('/')+1)} 
                                     name={trip.trip_name}  description={trip.description} 
-                                    experiences={trip.experiences}/></Tab.Pane>
+                                    experiences={trip.experiences}/>
+            </Tab.Pane>
                     )
                 })}
             </Tab.Content>

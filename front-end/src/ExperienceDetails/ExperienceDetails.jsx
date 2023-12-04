@@ -8,7 +8,7 @@ import axios from 'axios';
 import { environment } from '../Environments/EnvDev';
 
 
-function ExperienceDetails({id, name, location,description, address, city,country, latitude, longitude,rating, img_url}) {
+function ExperienceDetails({id, name, location, activity_type, description, address, city,country, latitude, longitude,rating, img_url}) {
     const {currentTrips} = useContext(ExperiencesContext);
     const [show, setShow] = useState(false);
     const [dropdownValue, setDropdownValue] = useState('Choose Trip');
@@ -45,6 +45,7 @@ function ExperienceDetails({id, name, location,description, address, city,countr
         // console.log(e);
         setDropdownValue(e);
     }
+    
 
     return ( 
         <Container className='h-100 w-100'>
@@ -102,7 +103,7 @@ function ExperienceDetails({id, name, location,description, address, city,countr
                     </Row>
                     <br></br>
                     <Row  style={{display:"inline"}}>
-                        <b>Type of Activity: </b>Museum
+                        <b>Type of Activity: </b>{!activity_type? "No Specified": activity_type }
                     </Row>
                 </Col>
             </Row>
